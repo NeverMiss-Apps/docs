@@ -6,7 +6,7 @@ description: "Solicita um saque do saldo disponível para sua chave PIX"
 
 ## Descrição
 
-Solicita um saque do seu saldo disponível para a chave PIX cadastrada. Existem dois tipos: **Normal** (R$ 0,50 - 24h) e **Turbo** (R$ 2,50 - instantâneo).
+Solicita um saque do seu saldo disponível para a chave PIX cadastrada. Existem dois tipos: **Normal** (R$ 0,50 - 24h) e **Turbo** (R$ 3,50 - instantâneo).
 
 ## Headers
 
@@ -36,7 +36,7 @@ Solicita um saque do seu saldo disponível para a chave PIX cadastrada. Existem 
   </Card>
   
   <Card title="Turbo" icon="bolt">
-    **Taxa**: R$ 2,50
+    **Taxa**: R$ 3,50
     
     **Tempo**: instantâneo
     
@@ -272,7 +272,7 @@ response = requests.post(
 
 | | Normal | Turbo |
 |---|--------|-------|
-| **Taxa** | R$ 0,50 | R$ 2,50 |
+| **Taxa** | R$ 0,50 | R$ 3,50 |
 | **Tempo** | até 24h | Instantâneo |
 | **Quando usar** | Sem urgência | Precisa urgente |
 | **Economia** | Mais econômico | Mais rápido |

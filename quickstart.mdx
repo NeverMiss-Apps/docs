@@ -9,17 +9,28 @@ Comece a receber pagamentos PIX rapidamente seguindo estes passos simples.
 
 ### Passo 1: Obtenha sua API Key
 
-<Warning>
-  A geração de API Keys requer autenticação interna. Entre em contato com o suporte para obter sua chave.
-</Warning>
+Acesse o dashboard da NeverMiss Apps para gerar sua API Key:
 
-Entre em contato através do:
-- **Discord**: [NeverMiss Apps Community](https://discord.gg/nevermiss)
-- **Email**: suporte@nevermissapps.com
+<Card
+  title="Gerar API Key"
+  icon="key"
+  href="https://nevermissapps.com/dashboard/configuracoes"
+  horizontal
+>
+  Acesse as Configurações no Dashboard
+</Card>
 
-### Passo 2: Configure suas informações
+<Note>
+**Dashboard completo**: No dashboard você também pode configurar visualmente todas as opções da sua conta, incluindo chave PIX, saque automático, dados da empresa (nome, logo, cor), webhook e callback URL.
+</Note>
 
-Configure sua chave PIX e informações da empresa para começar a receber pagamentos.
+### Passo 2: Configure suas informações (Opcional)
+
+<Tip>
+**Recomendado**: Use o [Dashboard - Configurações](https://nevermissapps.com/dashboard/configuracoes) para configurar visualmente chave PIX, saque automático, dados da empresa (nome, logo, cor), webhook e callback URL.
+</Tip>
+
+Alternativamente, você pode configurar via API usando o endpoint `/v1/register`:
 
 <CodeGroup>
 
@@ -32,6 +43,7 @@ curl -X POST https://carteira.nevermissapps.com/v1/register \
     "pixKeyType": "EMAIL",
     "companyName": "Minha Empresa",
     "companyLogo": "https://exemplo.com/logo.png",
+    "companyColor": "#7C3AED",
     "webhookUrl": "https://exemplo.com/webhook",
     "callbackUrl": "https://exemplo.com"
   }'
@@ -49,6 +61,7 @@ const response = await fetch('https://carteira.nevermissapps.com/v1/register', {
     pixKeyType: 'EMAIL',
     companyName: 'Minha Empresa',
     companyLogo: 'https://exemplo.com/logo.png',
+    companyColor: '#7C3AED',
     webhookUrl: 'https://exemplo.com/webhook',
     callbackUrl: 'https://exemplo.com'
   })
@@ -72,6 +85,7 @@ response = requests.post(
         'pixKeyType': 'EMAIL',
         'companyName': 'Minha Empresa',
         'companyLogo': 'https://exemplo.com/logo.png',
+        'companyColor': '#7C3AED',
         'webhookUrl': 'https://exemplo.com/webhook',
         'callbackUrl': 'https://exemplo.com'
     }
@@ -94,6 +108,7 @@ curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
     'pixKeyType' => 'EMAIL',
     'companyName' => 'Minha Empresa',
     'companyLogo' => 'https://exemplo.com/logo.png',
+    'companyColor' => '#7C3AED',
     'webhookUrl' => 'https://exemplo.com/webhook',
     'callbackUrl' => 'https://exemplo.com'
 ]));

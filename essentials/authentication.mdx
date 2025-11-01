@@ -61,14 +61,43 @@ curl_close($ch);
 
 ## Obtendo sua API Key
 
-<Warning>
-A geração de API Keys requer autenticação interna. Entre em contato com o suporte para obter sua chave.
-</Warning>
+Você pode gerar e gerenciar suas API Keys através do dashboard:
 
-Para obter sua API Key, entre em contato através de:
+<Card
+  title="Dashboard - Configurações"
+  icon="gear"
+  href="https://nevermissapps.com/dashboard/configuracoes"
+  horizontal
+>
+  Acesse para gerar sua API Key
+</Card>
 
-- **Discord**: [NeverMiss Apps Community](https://discord.gg/nevermiss)
-- **Email**: suporte@nevermissapps.com
+<Steps>
+  <Step title="Acesse o Dashboard">
+    Faça login em [nevermissapps.com](https://nevermissapps.com)
+  </Step>
+  
+  <Step title="Vá para Configurações">
+    No menu, acesse **Dashboard → Configurações**
+  </Step>
+  
+  <Step title="Gere sua API Key">
+    Clique em gerar nova chave e copie-a com segurança
+  </Step>
+</Steps>
+
+<Info>
+**Dashboard Completo**: Além da API Key, você pode configurar visualmente:
+- Chave PIX e tipo de chave
+- Saque automático
+- Nome da empresa
+- Logo da empresa
+- Cor da empresa
+- Webhook URL
+- Callback URL
+
+Todas essas configurações também podem ser feitas via API através do endpoint `/v1/register`.
+</Info>
 
 ## Segurança
 

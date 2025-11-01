@@ -6,7 +6,11 @@ description: "Configure chave PIX, saque automático, dados da empresa, webhook 
 
 ## Descrição
 
-Configura ou atualiza suas informações: chave PIX para saques, saque automático, dados da empresa (nome e logo), webhook URL e callback URL. **Todos os campos são opcionais**.
+Configura ou atualiza suas informações: chave PIX para saques, saque automático, dados da empresa (nome, logo e cor), webhook URL e callback URL. **Todos os campos são opcionais**.
+
+<Note>
+**Prefere interface visual?** Você pode configurar todas essas opções através do [Dashboard - Configurações](https://nevermissapps.com/dashboard/configuracoes) sem precisar usar a API.
+</Note>
 
 <Warning>
 **Rate Limit**: Este endpoint tem limite de **30 segundos** entre requisições
@@ -42,6 +46,10 @@ Configura ou atualiza suas informações: chave PIX para saques, saque automáti
 
 <ParamField body="companyLogo" type="string">
   URL da logo da sua empresa (exibida na página de pagamento)
+</ParamField>
+
+<ParamField body="companyColor" type="string">
+  Cor principal da sua empresa em hexadecimal (ex: `#7C3AED`)
 </ParamField>
 
 <ParamField body="webhookUrl" type="string">
@@ -91,6 +99,14 @@ Configura ou atualiza suas informações: chave PIX para saques, saque automáti
     - Exibida no topo da página de pagamento
     - Formatos: PNG, JPG, SVG
     - Recomendado: fundo transparente, 200x200px
+  </Accordion>
+  
+  <Accordion title="companyColor" icon="palette">
+    Cor principal da sua empresa em formato hexadecimal.
+    
+    - Usada na página de pagamento para botões e elementos de destaque
+    - Formato: `#RRGGBB` (ex: `#7C3AED`, `#10B981`)
+    - Se não configurado, usa a cor padrão da plataforma
   </Accordion>
   
   <Accordion title="webhookUrl" icon="webhook">
@@ -289,7 +305,8 @@ await fetch('https://carteira.nevermissapps.com/v1/register', {
     pixKey: 'empresa@example.com',
     pixKeyType: 'EMAIL',
     companyName: 'Minha Empresa',
-    companyLogo': 'https://empresa.com/logo.png',
+    companyLogo: 'https://empresa.com/logo.png',
+    companyColor: '#7C3AED',
     webhookUrl: 'https://empresa.com/api/webhook',
     callbackUrl: 'https://empresa.com'
   })
