@@ -18,12 +18,12 @@ Authorization: Bearer SUA_API_KEY_AQUI
 <CodeGroup>
 
 ```bash cURL
-curl -X GET https://carteira.nevermiss.com/v1/balance \
+curl -X GET https://carteira.nevermissapps.com/v1/balance \
   -H "Authorization: Bearer SUA_API_KEY"
 ```
 
 ```javascript Node.js
-const response = await fetch('https://carteira.nevermiss.com/v1/balance', {
+const response = await fetch('https://carteira.nevermissapps.com/v1/balance', {
   headers: {
     'Authorization': 'Bearer SUA_API_KEY'
   }
@@ -38,14 +38,14 @@ headers = {
 }
 
 response = requests.get(
-    'https://carteira.nevermiss.com/v1/balance',
+    'https://carteira.nevermissapps.com/v1/balance',
     headers=headers
 )
 ```
 
 ```php PHP
 <?php
-$ch = curl_init('https://carteira.nevermiss.com/v1/balance');
+$ch = curl_init('https://carteira.nevermissapps.com/v1/balance');
 
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
     'Authorization: Bearer SUA_API_KEY'
@@ -68,7 +68,7 @@ A geração de API Keys requer autenticação interna. Entre em contato com o su
 Para obter sua API Key, entre em contato através de:
 
 - **Discord**: [NeverMiss Apps Community](https://discord.gg/nevermiss)
-- **Email**: suporte@nevermiss.com
+- **Email**: suporte@nevermissapps.com
 
 ## Segurança
 
@@ -107,7 +107,7 @@ Para obter sua API Key, entre em contato através de:
     ```javascript
     // backend/api/payment.js
     app.post('/create-payment', async (req, res) => {
-      const response = await fetch('https://carteira.nevermiss.com/v1/payment/create', {
+      const response = await fetch('https://carteira.nevermissapps.com/v1/payment/create', {
         headers: { 'Authorization': `Bearer ${process.env.NEVERMISS_API_KEY}` },
         // ...
       });
@@ -117,7 +117,7 @@ Para obter sua API Key, entre em contato através de:
     ❌ **Errado**: Nunca faça isso no frontend
     ```javascript
     // frontend/payment.js - NÃO FAÇA ISSO!
-    const response = await fetch('https://carteira.nevermiss.com/v1/payment/create', {
+    const response = await fetch('https://carteira.nevermissapps.com/v1/payment/create', {
       headers: { 'Authorization': 'Bearer sua_chave_exposta' }
     });
     ```

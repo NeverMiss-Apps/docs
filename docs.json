@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Carteira NeverMiss API",
+  "name": "NeverMiss Apps",
   "colors": {
     "primary": "#7C3AED",
     "light": "#A78BFA",
@@ -11,37 +11,42 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Documentação",
+        "tab": "Início",
+        "groups": [
+          {
+            "group": "Bem-vindo",
+            "pages": [
+              "index"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Carteira",
         "groups": [
           {
             "group": "Começando",
             "pages": [
-              "index",
               "quickstart"
             ]
           },
           {
-            "group": "Conceitos Principais",
+            "group": "Conceitos",
             "pages": [
               "essentials/authentication",
               "essentials/rate-limits",
               "essentials/webhooks",
               "essentials/errors"
             ]
-          }
-        ]
-      },
-      {
-        "tab": "Referência da API",
-        "groups": [
+          },
           {
-            "group": "Introdução",
+            "group": "API - Introdução",
             "pages": [
               "api-reference/introduction"
             ]
           },
           {
-            "group": "Pagamentos",
+            "group": "API - Pagamentos",
             "pages": [
               "api-reference/endpoint/create",
               "api-reference/endpoint/get",
@@ -49,20 +54,20 @@
             ]
           },
           {
-            "group": "Saldo e Saques",
+            "group": "API - Saldo e Saques",
             "pages": [
               "api-reference/endpoint/balance",
               "api-reference/endpoint/withdraw"
             ]
           },
           {
-            "group": "Configuração",
+            "group": "API - Configuração",
             "pages": [
               "api-reference/endpoint/register"
             ]
           },
           {
-            "group": "Transações",
+            "group": "API - Transações",
             "pages": [
               "api-reference/endpoint/transactions",
               "api-reference/endpoint/transaction-detail"
@@ -75,7 +80,7 @@
       "anchors": [
         {
           "anchor": "Dashboard",
-          "href": "https://nevermissapps.com",
+          "href": "https://nevermissapps.com/dashboard",
           "icon": "square-terminal"
         },
         {
@@ -100,7 +105,7 @@
     "primary": {
       "type": "button",
       "label": "Dashboard",
-      "href": "https://carteira.nevermiss.com"
+      "href": "https://nevermissapps.com/dashboard"
     }
   },
   "contextual": {

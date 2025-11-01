@@ -1,6 +1,6 @@
 ---
 title: "Configurar Registro"
-api: "POST https://carteira.nevermiss.com/v1/register"
+api: "POST https://carteira.nevermissapps.com/v1/register"
 description: "Configure chave PIX, saque automático, dados da empresa, webhook e callback URL"
 ---
 
@@ -116,7 +116,7 @@ Configura ou atualiza suas informações: chave PIX para saques, saque automáti
     
     Quando configurada:
     - Habilita geração de `paymentLink` ao criar pagamentos
-    - Sistema gera: `https://carteira.nevermiss.com/pay/{txid}`
+    - Sistema gera: `https://carteira.nevermissapps.com/pay/{txid}`
     - Página customizada com sua logo e nome
     - Redireciona cliente após pagamento (se `redirectUrl` fornecida)
   </Accordion>
@@ -169,7 +169,7 @@ Configura ou atualiza suas informações: chave PIX para saques, saque automáti
 <RequestExample>
 
 ```bash Configuração Completa
-curl -X POST https://carteira.nevermiss.com/v1/register \
+curl -X POST https://carteira.nevermissapps.com/v1/register \
   -H "Authorization: Bearer SUA_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -183,7 +183,7 @@ curl -X POST https://carteira.nevermiss.com/v1/register \
 ```
 
 ```bash Apenas Chave PIX
-curl -X POST https://carteira.nevermiss.com/v1/register \
+curl -X POST https://carteira.nevermissapps.com/v1/register \
   -H "Authorization: Bearer SUA_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -193,14 +193,14 @@ curl -X POST https://carteira.nevermiss.com/v1/register \
 ```
 
 ```bash Ativar Saque Automático
-curl -X POST https://carteira.nevermiss.com/v1/register \
+curl -X POST https://carteira.nevermissapps.com/v1/register \
   -H "Authorization: Bearer SUA_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"autoWithdrawal": true}'
 ```
 
 ```javascript Node.js
-const response = await fetch('https://carteira.nevermiss.com/v1/register', {
+const response = await fetch('https://carteira.nevermissapps.com/v1/register', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer SUA_API_KEY',
@@ -221,7 +221,7 @@ const response = await fetch('https://carteira.nevermiss.com/v1/register', {
 import requests
 
 response = requests.post(
-    'https://carteira.nevermiss.com/v1/register',
+    'https://carteira.nevermissapps.com/v1/register',
     headers={
         'Authorization': 'Bearer SUA_API_KEY',
         'Content-Type': 'application/json'
@@ -279,7 +279,7 @@ response = requests.post(
 ### 1. Setup Inicial Completo
 
 ```javascript
-await fetch('https://carteira.nevermiss.com/v1/register', {
+await fetch('https://carteira.nevermissapps.com/v1/register', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer SUA_API_KEY',
@@ -299,7 +299,7 @@ await fetch('https://carteira.nevermiss.com/v1/register', {
 ### 2. Apenas Atualizar Webhook
 
 ```javascript
-await fetch('https://carteira.nevermiss.com/v1/register', {
+await fetch('https://carteira.nevermissapps.com/v1/register', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer SUA_API_KEY',
@@ -314,7 +314,7 @@ await fetch('https://carteira.nevermiss.com/v1/register', {
 ### 3. Remover Chave PIX
 
 ```javascript
-await fetch('https://carteira.nevermiss.com/v1/register', {
+await fetch('https://carteira.nevermissapps.com/v1/register', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer SUA_API_KEY',

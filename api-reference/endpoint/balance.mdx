@@ -1,6 +1,6 @@
 ---
 title: "Consultar Saldo"
-api: "GET https://carteira.nevermiss.com/v1/balance"
+api: "GET https://carteira.nevermissapps.com/v1/balance"
 description: "Retorna seu saldo disponível e informações sobre saques pendentes"
 ---
 
@@ -41,12 +41,12 @@ Consulta seu saldo atual disponível para saque e o valor de qualquer saque pend
 <RequestExample>
 
 ```bash cURL
-curl -X GET https://carteira.nevermiss.com/v1/balance \
+curl -X GET https://carteira.nevermissapps.com/v1/balance \
   -H "Authorization: Bearer SUA_API_KEY"
 ```
 
 ```javascript Node.js
-const response = await fetch('https://carteira.nevermiss.com/v1/balance', {
+const response = await fetch('https://carteira.nevermissapps.com/v1/balance', {
   headers: {
     'Authorization': 'Bearer SUA_API_KEY'
   }
@@ -60,7 +60,7 @@ console.log(`Saldo disponível: R$ ${data.balance.available}`);
 import requests
 
 response = requests.get(
-    'https://carteira.nevermiss.com/v1/balance',
+    'https://carteira.nevermissapps.com/v1/balance',
     headers={'Authorization': 'Bearer SUA_API_KEY'}
 )
 
@@ -70,7 +70,7 @@ print(f"Saldo disponível: R$ {data['balance']['available']}")
 
 ```php PHP
 <?php
-$ch = curl_init('https://carteira.nevermiss.com/v1/balance');
+$ch = curl_init('https://carteira.nevermissapps.com/v1/balance');
 
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
     'Authorization: Bearer SUA_API_KEY'

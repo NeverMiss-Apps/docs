@@ -1,6 +1,6 @@
 ---
 title: "Verificar Status de Pagamento"
-api: "GET https://carteira.nevermiss.com/v1/payment/status/{txid}"
+api: "GET https://carteira.nevermissapps.com/v1/payment/status/{txid}"
 description: "Verifica o status atual de uma transação específica"
 ---
 
@@ -67,14 +67,14 @@ Consulta o status de um pagamento específico pelo ID da transação (txid).
 <RequestExample>
 
 ```bash cURL
-curl -X GET https://carteira.nevermiss.com/v1/payment/status/ABC123XYZ \
+curl -X GET https://carteira.nevermissapps.com/v1/payment/status/ABC123XYZ \
   -H "Authorization: Bearer SUA_API_KEY"
 ```
 
 ```javascript Node.js
 const txid = 'ABC123XYZ';
 const response = await fetch(
-  `https://carteira.nevermiss.com/v1/payment/status/${txid}`,
+  `https://carteira.nevermissapps.com/v1/payment/status/${txid}`,
   {
     headers: {
       'Authorization': 'Bearer SUA_API_KEY'
@@ -91,7 +91,7 @@ import requests
 
 txid = 'ABC123XYZ'
 response = requests.get(
-    f'https://carteira.nevermiss.com/v1/payment/status/{txid}',
+    f'https://carteira.nevermissapps.com/v1/payment/status/{txid}',
     headers={'Authorization': 'Bearer SUA_API_KEY'}
 )
 
@@ -102,7 +102,7 @@ print(status)
 ```php PHP
 <?php
 $txid = 'ABC123XYZ';
-$ch = curl_init("https://carteira.nevermiss.com/v1/payment/status/$txid");
+$ch = curl_init("https://carteira.nevermissapps.com/v1/payment/status/$txid");
 
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
     'Authorization: Bearer SUA_API_KEY'
@@ -181,7 +181,7 @@ Se não estiver usando webhooks, você pode fazer polling para verificar o statu
 async function waitForPayment(txid, maxAttempts = 60) {
   for (let i = 0; i < maxAttempts; i++) {
     const response = await fetch(
-      `https://carteira.nevermiss.com/v1/payment/status/${txid}`,
+      `https://carteira.nevermissapps.com/v1/payment/status/${txid}`,
       { headers: { 'Authorization': `Bearer ${API_KEY}` } }
     );
     

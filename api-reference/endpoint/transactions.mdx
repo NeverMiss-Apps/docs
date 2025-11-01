@@ -1,6 +1,6 @@
 ---
 title: "Listar Transações"
-api: "GET https://carteira.nevermiss.com/v1/transactions"
+api: "GET https://carteira.nevermissapps.com/v1/transactions"
 description: "Lista todas as suas transações com paginação e filtros opcionais"
 ---
 
@@ -101,30 +101,30 @@ Retorna uma lista paginada de todas as suas transações (pagamentos e saques) c
 <RequestExample>
 
 ```bash Todas as transações
-curl -X GET "https://carteira.nevermiss.com/v1/transactions?limit=50&offset=0" \
+curl -X GET "https://carteira.nevermissapps.com/v1/transactions?limit=50&offset=0" \
   -H "Authorization: Bearer SUA_API_KEY"
 ```
 
 ```bash Apenas pagamentos aprovados
-curl -X GET "https://carteira.nevermiss.com/v1/transactions?type=payment&status=approved" \
+curl -X GET "https://carteira.nevermissapps.com/v1/transactions?type=payment&status=approved" \
   -H "Authorization: Bearer SUA_API_KEY"
 ```
 
 ```bash Apenas saques
-curl -X GET "https://carteira.nevermiss.com/v1/transactions?type=withdrawal&limit=10" \
+curl -X GET "https://carteira.nevermissapps.com/v1/transactions?type=withdrawal&limit=10" \
   -H "Authorization: Bearer SUA_API_KEY"
 ```
 
 ```javascript Node.js
 // Listar todas
 const response = await fetch(
-  'https://carteira.nevermiss.com/v1/transactions?limit=50&offset=0',
+  'https://carteira.nevermissapps.com/v1/transactions?limit=50&offset=0',
   { headers: { 'Authorization': 'Bearer SUA_API_KEY' } }
 );
 
 // Filtrar pagamentos aprovados
 const response = await fetch(
-  'https://carteira.nevermiss.com/v1/transactions?type=payment&status=approved',
+  'https://carteira.nevermissapps.com/v1/transactions?type=payment&status=approved',
   { headers: { 'Authorization': 'Bearer SUA_API_KEY' } }
 );
 
@@ -137,14 +137,14 @@ import requests
 
 # Listar todas
 response = requests.get(
-    'https://carteira.nevermiss.com/v1/transactions',
+    'https://carteira.nevermissapps.com/v1/transactions',
     headers={'Authorization': 'Bearer SUA_API_KEY'},
     params={'limit': 50, 'offset': 0}
 )
 
 # Filtrar pagamentos aprovados
 response = requests.get(
-    'https://carteira.nevermiss.com/v1/transactions',
+    'https://carteira.nevermissapps.com/v1/transactions',
     headers={'Authorization': 'Bearer SUA_API_KEY'},
     params={'type': 'payment', 'status': 'approved'}
 )
@@ -156,7 +156,7 @@ print(f"Total: {data['pagination']['total']} transações")
 ```php PHP
 <?php
 // Listar todas
-$url = 'https://carteira.nevermiss.com/v1/transactions?limit=50&offset=0';
+$url = 'https://carteira.nevermissapps.com/v1/transactions?limit=50&offset=0';
 $ch = curl_init($url);
 
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -224,7 +224,7 @@ async function getAllTransactions() {
   
   while (true) {
     const response = await fetch(
-      `https://carteira.nevermiss.com/v1/transactions?limit=${limit}&offset=${offset}`,
+      `https://carteira.nevermissapps.com/v1/transactions?limit=${limit}&offset=${offset}`,
       { headers: { 'Authorization': `Bearer ${API_KEY}` } }
     );
     
@@ -245,21 +245,21 @@ async function getAllTransactions() {
 
 ```javascript Pagamentos Aprovados
 const response = await fetch(
-  'https://carteira.nevermiss.com/v1/transactions?type=payment&status=approved',
+  'https://carteira.nevermissapps.com/v1/transactions?type=payment&status=approved',
   { headers: { 'Authorization': `Bearer ${API_KEY}` } }
 );
 ```
 
 ```javascript Últimos 10 Saques
 const response = await fetch(
-  'https://carteira.nevermiss.com/v1/transactions?type=withdrawal&limit=10',
+  'https://carteira.nevermissapps.com/v1/transactions?type=withdrawal&limit=10',
   { headers: { 'Authorization': `Bearer ${API_KEY}` } }
 );
 ```
 
 ```javascript Pagamentos Pendentes
 const response = await fetch(
-  'https://carteira.nevermiss.com/v1/transactions?type=payment&status=pending',
+  'https://carteira.nevermissapps.com/v1/transactions?type=payment&status=pending',
   { headers: { 'Authorization': `Bearer ${API_KEY}` } }
 );
 ```

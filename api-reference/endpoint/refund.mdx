@@ -1,6 +1,6 @@
 ---
 title: "Reembolsar Pagamento"
-api: "POST https://carteira.nevermiss.com/v1/refund"
+api: "POST https://carteira.nevermissapps.com/v1/refund"
 description: "Reembolsa um pagamento aprovado, devolvendo o valor ao pagador"
 ---
 
@@ -87,14 +87,14 @@ Reembolsa um pagamento aprovado. O valor **TOTAL** (incluindo taxa) é devolvido
 <RequestExample>
 
 ```bash cURL
-curl -X POST https://carteira.nevermiss.com/v1/refund \
+curl -X POST https://carteira.nevermissapps.com/v1/refund \
   -H "Authorization: Bearer SUA_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"txid": "ABC123XYZ"}'
 ```
 
 ```javascript Node.js
-const response = await fetch('https://carteira.nevermiss.com/v1/refund', {
+const response = await fetch('https://carteira.nevermissapps.com/v1/refund', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer SUA_API_KEY',
@@ -113,7 +113,7 @@ console.log(refund);
 import requests
 
 response = requests.post(
-    'https://carteira.nevermiss.com/v1/refund',
+    'https://carteira.nevermissapps.com/v1/refund',
     headers={
         'Authorization': 'Bearer SUA_API_KEY',
         'Content-Type': 'application/json'
@@ -127,7 +127,7 @@ print(refund)
 
 ```php PHP
 <?php
-$ch = curl_init('https://carteira.nevermiss.com/v1/refund');
+$ch = curl_init('https://carteira.nevermissapps.com/v1/refund');
 
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
