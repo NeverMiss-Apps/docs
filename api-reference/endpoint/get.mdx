@@ -1,4 +1,205 @@
 ---
-title: 'Get Plants'
-openapi: 'GET /plants'
+title: "Verificar Status de Pagamento"
+api: "GET https://carteira.nevermiss.com/v1/payment/status/{txid}"
+description: "Verifica o status atual de uma transação específica"
 ---
+
+## Descrição
+
+Consulta o status de um pagamento específico pelo ID da transação (txid).
+
+## Path Parameters
+
+<ParamField path="txid" type="string" required>
+  ID da transação obtido ao criar o pagamento
+</ParamField>
+
+## Headers
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token com sua API Key
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Indica se a operação foi bem-sucedida
+</ResponseField>
+
+<ResponseField name="transaction" type="object">
+  Detalhes da transação
+  
+  <Expandable title="properties">
+    <ResponseField name="txid" type="string">
+      ID da transação
+    </ResponseField>
+    
+    <ResponseField name="amount" type="number">
+      Valor total
+    </ResponseField>
+    
+    <ResponseField name="netAmount" type="number">
+      Valor líquido recebido
+    </ResponseField>
+    
+    <ResponseField name="fee" type="number">
+      Taxa cobrada
+    </ResponseField>
+    
+    <ResponseField name="status" type="string">
+      Status: `pending`, `approved`, `refunded`
+    </ResponseField>
+    
+    <ResponseField name="type" type="string">
+      Tipo da transação: `link`
+    </ResponseField>
+    
+    <ResponseField name="createdAt" type="number">
+      Timestamp de criação
+    </ResponseField>
+    
+    <ResponseField name="updatedAt" type="number">
+      Timestamp da última atualização
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<RequestExample>
+
+```bash cURL
+curl -X GET https://carteira.nevermiss.com/v1/payment/status/ABC123XYZ \
+  -H "Authorization: Bearer SUA_API_KEY"
+```
+
+```javascript Node.js
+const txid = 'ABC123XYZ';
+const response = await fetch(
+  `https://carteira.nevermiss.com/v1/payment/status/${txid}`,
+  {
+    headers: {
+      'Authorization': 'Bearer SUA_API_KEY'
+    }
+  }
+);
+
+const status = await response.json();
+console.log(status);
+```
+
+```python Python
+import requests
+
+txid = 'ABC123XYZ'
+response = requests.get(
+    f'https://carteira.nevermiss.com/v1/payment/status/{txid}',
+    headers={'Authorization': 'Bearer SUA_API_KEY'}
+)
+
+status = response.json()
+print(status)
+```
+
+```php PHP
+<?php
+$txid = 'ABC123XYZ';
+$ch = curl_init("https://carteira.nevermiss.com/v1/payment/status/$txid");
+
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer SUA_API_KEY'
+]);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+$status = curl_exec($ch);
+curl_close($ch);
+
+echo $status;
+?>
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Sucesso - Pendente (200)
+{
+  "success": true,
+  "transaction": {
+    "txid": "ABC123XYZ",
+    "amount": 49.90,
+    "netAmount": 46.41,
+    "fee": 3.49,
+    "status": "pending",
+    "type": "link",
+    "createdAt": 1698765432000,
+    "updatedAt": 1698765432000
+  }
+}
+```
+
+```json Sucesso - Aprovado (200)
+{
+  "success": true,
+  "transaction": {
+    "txid": "ABC123XYZ",
+    "amount": 49.90,
+    "netAmount": 46.41,
+    "fee": 3.49,
+    "status": "approved",
+    "type": "link",
+    "createdAt": 1698765432000,
+    "updatedAt": 1698765532000
+  }
+}
+```
+
+```json Erro - Não encontrado (404)
+{
+  "error": "Not Found",
+  "message": "Transaction not found"
+}
+```
+
+</ResponseExample>
+
+## Status Possíveis
+
+| Status | Descrição |
+|--------|-----------|
+| `pending` | Aguardando pagamento do cliente |
+| `approved` | Pagamento confirmado e valor creditado em sua conta |
+| `refunded` | Pagamento reembolsado ao cliente |
+
+<Tip>
+**Use Webhooks**: Em vez de fazer polling constante, configure um webhook para receber notificações automáticas quando o pagamento for aprovado. Veja [Webhooks](/essentials/webhooks).
+</Tip>
+
+## Exemplo de Polling
+
+Se não estiver usando webhooks, você pode fazer polling para verificar o status:
+
+```javascript
+async function waitForPayment(txid, maxAttempts = 60) {
+  for (let i = 0; i < maxAttempts; i++) {
+    const response = await fetch(
+      `https://carteira.nevermiss.com/v1/payment/status/${txid}`,
+      { headers: { 'Authorization': `Bearer ${API_KEY}` } }
+    );
+    
+    const { transaction } = await response.json();
+    
+    if (transaction.status === 'approved') {
+      console.log('Pagamento aprovado!');
+      return transaction;
+    }
+    
+    // Aguarda 5 segundos antes de tentar novamente
+    await new Promise(resolve => setTimeout(resolve, 5000));
+  }
+  
+  throw new Error('Timeout aguardando pagamento');
+}
+```
+
+<Warning>
+**Respeite o Rate Limit**: Não faça polling muito frequente. Recomendamos intervalos de pelo menos 5 segundos entre verificações.
+</Warning>

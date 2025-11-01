@@ -1,97 +1,148 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: "Bem-vindo à API Carteira NeverMiss"
+description: "Documentação completa da API pública v1 para integração de pagamentos PIX"
 ---
 
-## Setting up
+## Introdução
 
-Get your documentation site up and running in minutes.
+A API Carteira NeverMiss permite que você integre pagamentos PIX em sua aplicação de forma simples e segura. Crie cobranças, receba pagamentos e gerencie saques automaticamente.
+
+<Note>
+**Potencializado por Cube Hosting**: A NeverMiss Apps utiliza a infraestrutura e serviços de pagamento da **Cube Hosting LTDA** para garantir segurança, estabilidade e confiabilidade em todas as operações.
+</Note>
 
 <Card
-  title="Start here"
+  title="Começar agora"
   icon="rocket"
   href="/quickstart"
   horizontal
 >
-  Follow our three step quickstart guide.
+  Configure sua primeira integração em minutos
 </Card>
 
-## Make it yours
+## Principais recursos
 
-Design a docs site that looks great and empowers your users.
+<CardGroup cols={2}>
+  <Card
+    title="Pagamentos PIX"
+    icon="qrcode"
+    href="/api-reference/endpoint/create"
+  >
+    Crie cobranças PIX com QR Code e Copia e Cola automaticamente
+  </Card>
+  <Card
+    title="Webhooks"
+    icon="webhook"
+    href="/essentials/webhooks"
+  >
+    Receba notificações em tempo real sobre pagamentos aprovados
+  </Card>
+  <Card
+    title="Saques Automáticos"
+    icon="money-bill-transfer"
+    href="/api-reference/endpoint/withdraw"
+  >
+    Configure saques automáticos ou solicite manualmente quando precisar
+  </Card>
+  <Card
+    title="Página de Pagamento"
+    icon="browser"
+    href="/essentials/webhooks"
+  >
+    Use nossa página de pagamento customizável ou integre no seu site
+  </Card>
+</CardGroup>
 
-<Columns cols={2}>
+## Informações importantes
+
+<AccordionGroup>
+  <Accordion icon="percent" title="Taxa de serviço">
+    A plataforma cobra **6.99%** sobre o valor de cada transação. Esta taxa é deduzida automaticamente do valor recebido.
+    
+    Exemplo: Pagamento de R$ 100,00
+    - Taxa: R$ 6,99
+    - Você recebe: R$ 93,01
+  </Accordion>
+  
+  <Accordion icon="clock" title="Taxa de saque">
+    Dois tipos de saque disponíveis:
+    - **Normal**: R$ 0,50 - Processado em até 24 horas
+    - **Turbo**: R$ 2,50 - Processado instantaneamente
+    
+    Valor mínimo para saque: R$ 5,00
+  </Accordion>
+  
+  <Accordion icon="gauge" title="Rate limits">
+    - **Geral**: 60 requisições por minuto
+    - **Atualização de registro**: 30 segundos entre requisições
+  </Accordion>
+  
+  <Accordion icon="key" title="Autenticação">
+    Todas as requisições precisam do header:
+    ```
+    Authorization: Bearer SUA_API_KEY
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Base URL
+
+```
+https://carteira.nevermiss.com/v1
+```
+
+## Casos de uso
+
+<CardGroup cols={2}>
   <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
+    title="E-commerce"
+    icon="cart-shopping"
   >
-    Edit your docs locally and preview them in real time.
+    Integre pagamentos PIX no checkout da sua loja virtual
   </Card>
   <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
+    title="SaaS"
+    icon="cloud"
   >
-    Customize the design and colors of your site to match your brand.
-  </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+    Cobre assinaturas e planos com pagamento via PIX
   </Card>
   <Card
-    title="API documentation"
-    icon="terminal"
+    title="Marketplaces"
+    icon="store"
+  >
+    Gerencie pagamentos entre compradores e vendedores
+  </Card>
+  <Card
+    title="Serviços Digitais"
+    icon="laptop-code"
+  >
+    Monetize produtos digitais, cursos e conteúdos
+  </Card>
+</CardGroup>
+
+## Precisa de ajuda?
+
+<CardGroup cols={2}>
+  <Card
+    title="Documentação da API"
+    icon="code"
     href="/api-reference/introduction"
   >
-    Auto-generate API documentation from OpenAPI specifications.
-  </Card>
-</Columns>
-
-## Create beautiful pages
-
-Everything you need to create world-class documentation.
-
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
+    Explore todos os endpoints disponíveis
   </Card>
   <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
+    title="Discord"
+    icon="discord"
+    href="https://discord.gg/nevermiss"
   >
-    Add sample code to demonstrate how to use your product.
+    Entre na nossa comunidade
   </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
+</CardGroup>
 
-## Need inspiration?
+---
 
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+## Disclaimer Legal
+
+<Warning>
+**Intermediação Financeira**: Todos os pagamentos serão processados e efetuados pela **CUBE HOSTING LTDA**, pessoa jurídica de direito privado, inscrita no CNPJ sob nº **62.429.632/0001-22**, responsável pela intermediação financeira e gestão da plataforma.
+</Warning>

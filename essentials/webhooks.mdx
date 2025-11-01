@@ -1,0 +1,375 @@
+---
+title: "Webhooks"
+description: "Receba notificações automáticas sobre eventos importantes"
+---
+
+## Introdução
+
+Webhooks permitem que você receba notificações em tempo real quando eventos importantes ocorrem, como pagamentos aprovados. Em vez de fazer polling constante para verificar o status, o sistema envia automaticamente uma notificação para sua URL configurada.
+
+## Configurando Webhooks
+
+Para receber webhooks, configure sua URL através do endpoint `/v1/register`:
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://carteira.nevermiss.com/v1/register \
+  -H "Authorization: Bearer SUA_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "webhookUrl": "https://seusite.com/webhook/nevermiss"
+  }'
+```
+
+```javascript Node.js
+const response = await fetch('https://carteira.nevermiss.com/v1/register', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer SUA_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    webhookUrl: 'https://seusite.com/webhook/nevermiss'
+  })
+});
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://carteira.nevermiss.com/v1/register',
+    headers={
+        'Authorization': 'Bearer SUA_API_KEY',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'webhookUrl': 'https://seusite.com/webhook/nevermiss'
+    }
+)
+```
+
+</CodeGroup>
+
+## Eventos de Webhook
+
+### payment.approved
+
+Enviado quando um pagamento PIX é confirmado e o valor é creditado.
+
+**Payload:**
+
+```json
+{
+  "event": "payment.approved",
+  "txid": "ABC123XYZ",
+  "amount": 10.50,
+  "netAmount": 9.77,
+  "fee": 0.73,
+  "timestamp": 1698765432000
+}
+```
+
+| Campo | Tipo | Descrição |
+|-------|------|-----------|
+| `event` | string | Tipo do evento: `payment.approved` |
+| `txid` | string | ID único da transação |
+| `amount` | number | Valor total do pagamento |
+| `netAmount` | number | Valor líquido que você recebeu |
+| `fee` | number | Taxa cobrada (6.99%) |
+| `timestamp` | number | Timestamp Unix do evento |
+
+## Implementando o Webhook Endpoint
+
+Seu servidor deve responder às requisições de webhook corretamente:
+
+<CodeGroup>
+
+```javascript Express (Node.js)
+const express = require('express');
+const app = express();
+
+app.use(express.json());
+
+app.post('/webhook/nevermiss', async (req, res) => {
+  const { event, txid, amount, netAmount, fee, timestamp } = req.body;
+  
+  if (event === 'payment.approved') {
+    console.log(`Pagamento aprovado: ${txid}`);
+    
+    // Valide o pagamento consultando a API
+    const validation = await fetch(
+      `https://carteira.nevermiss.com/v1/payment/status/${txid}`,
+      {
+        headers: { 'Authorization': `Bearer ${process.env.API_KEY}` }
+      }
+    );
+    
+    const paymentData = await validation.json();
+    
+    if (paymentData.transaction.status === 'approved') {
+      // Processe o pagamento no seu sistema
+      await processPayment(txid, netAmount);
+    }
+  }
+  
+  // Retorne 200 para confirmar recebimento
+  res.status(200).json({ received: true });
+});
+
+app.listen(3000);
+```
+
+```python Flask (Python)
+from flask import Flask, request, jsonify
+import requests
+
+app = Flask(__name__)
+
+@app.route('/webhook/nevermiss', methods=['POST'])
+def webhook():
+    data = request.json
+    
+    if data['event'] == 'payment.approved':
+        txid = data['txid']
+        print(f'Pagamento aprovado: {txid}')
+        
+        # Valide o pagamento consultando a API
+        response = requests.get(
+            f'https://carteira.nevermiss.com/v1/payment/status/{txid}',
+            headers={'Authorization': f'Bearer {os.getenv("API_KEY")}'}
+        )
+        
+        payment_data = response.json()
+        
+        if payment_data['transaction']['status'] == 'approved':
+            # Processe o pagamento no seu sistema
+            process_payment(txid, data['netAmount'])
+    
+    # Retorne 200 para confirmar recebimento
+    return jsonify({'received': True}), 200
+
+if __name__ == '__main__':
+    app.run(port=3000)
+```
+
+```php PHP
+<?php
+// webhook.php
+
+// Leia o payload
+$payload = json_decode(file_get_contents('php://input'), true);
+
+if ($payload['event'] === 'payment.approved') {
+    $txid = $payload['txid'];
+    error_log("Pagamento aprovado: $txid");
+    
+    // Valide o pagamento consultando a API
+    $ch = curl_init("https://carteira.nevermiss.com/v1/payment/status/$txid");
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . getenv('API_KEY')
+    ]);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    
+    $response = curl_exec($ch);
+    $paymentData = json_decode($response, true);
+    curl_close($ch);
+    
+    if ($paymentData['transaction']['status'] === 'approved') {
+        // Processe o pagamento no seu sistema
+        processPayment($txid, $payload['netAmount']);
+    }
+}
+
+// Retorne 200 para confirmar recebimento
+http_response_code(200);
+echo json_encode(['received' => true]);
+?>
+```
+
+</CodeGroup>
+
+## Requisitos do Endpoint
+
+<AccordionGroup>
+  <Accordion title="Responda com status 2xx" icon="check">
+    Seu endpoint deve retornar um código de status HTTP 2xx (200, 201, 204) para confirmar o recebimento:
+    
+    ```javascript
+    res.status(200).json({ received: true });
+    ```
+    
+    Qualquer outro status será considerado uma falha.
+  </Accordion>
+  
+  <Accordion title="Timeout de 10 segundos" icon="clock">
+    Seu servidor tem 10 segundos para responder. Se exceder esse tempo, consideramos a tentativa como falha.
+    
+    **Dica**: Processe operações demoradas de forma assíncrona:
+    
+    ```javascript
+    app.post('/webhook/nevermiss', async (req, res) => {
+      // Responda rapidamente
+      res.status(200).json({ received: true });
+      
+      // Processe em background
+      processWebhookAsync(req.body).catch(console.error);
+    });
+    ```
+  </Accordion>
+  
+  <Accordion title="Idempotência" icon="rotate">
+    O mesmo webhook pode ser enviado mais de uma vez. Implemente idempotência para evitar processamento duplicado:
+    
+    ```javascript
+    const processedWebhooks = new Set();
+    
+    app.post('/webhook/nevermiss', async (req, res) => {
+      const { txid } = req.body;
+      
+      // Evite processar o mesmo webhook duas vezes
+      if (processedWebhooks.has(txid)) {
+        return res.status(200).json({ received: true, duplicate: true });
+      }
+      
+      processedWebhooks.add(txid);
+      await processPayment(txid);
+      
+      res.status(200).json({ received: true });
+    });
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Segurança
+
+<Warning>
+**Sempre valide os webhooks!**
+
+Nunca confie cegamente nos dados do webhook. Sempre valide consultando a API.
+</Warning>
+
+### Validação Recomendada
+
+```javascript
+async function validateWebhook(txid) {
+  try {
+    const response = await fetch(
+      `https://carteira.nevermiss.com/v1/payment/status/${txid}`,
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.API_KEY}`
+        }
+      }
+    );
+    
+    const data = await response.json();
+    return data.transaction.status === 'approved';
+  } catch (error) {
+    console.error('Erro ao validar webhook:', error);
+    return false;
+  }
+}
+
+app.post('/webhook/nevermiss', async (req, res) => {
+  const { event, txid } = req.body;
+  
+  if (event === 'payment.approved') {
+    // Valide antes de processar
+    const isValid = await validateWebhook(txid);
+    
+    if (isValid) {
+      await processPayment(txid);
+    } else {
+      console.warn(`Webhook inválido recebido: ${txid}`);
+    }
+  }
+  
+  res.status(200).json({ received: true });
+});
+```
+
+### Outras Medidas de Segurança
+
+<Accordion title="Use HTTPS" icon="lock">
+  Configure seu webhook endpoint apenas com HTTPS para garantir que os dados sejam criptografados em trânsito.
+</Accordion>
+
+<Accordion title="Restrinja IPs (opcional)" icon="shield">
+  Se necessário, você pode restringir o acesso ao seu endpoint apenas aos IPs da NeverMiss. Entre em contato com o suporte para obter a lista de IPs.
+</Accordion>
+
+## Retentativas
+
+Se seu endpoint falhar ao receber um webhook (timeout, erro 5xx, etc), o sistema tentará reenviar:
+
+<Steps>
+  <Step title="Tentativa 1">
+    Imediatamente após a falha
+  </Step>
+  <Step title="Tentativa 2">
+    30 segundos depois
+  </Step>
+  <Step title="Tentativa 3">
+    5 minutos depois (última tentativa)
+  </Step>
+</Steps>
+
+<Note>
+Após 3 tentativas falhadas, o webhook é descartado. Você pode consultar o status do pagamento manualmente via API.
+</Note>
+
+## Testando Webhooks
+
+### Desenvolvimento Local
+
+Para testar webhooks localmente, use ferramentas como [ngrok](https://ngrok.com/) para expor seu servidor local:
+
+```bash
+# Inicie seu servidor local
+npm start # ou python app.py
+
+# Em outro terminal, inicie o ngrok
+ngrok http 3000
+
+# Use a URL do ngrok na configuração
+# Exemplo: https://abc123.ngrok.io/webhook/nevermiss
+```
+
+### Logs e Debugging
+
+Adicione logs detalhados para facilitar o debugging:
+
+```javascript
+app.post('/webhook/nevermiss', async (req, res) => {
+  console.log('Webhook recebido:', {
+    timestamp: new Date().toISOString(),
+    body: req.body,
+    headers: req.headers
+  });
+  
+  try {
+    await processWebhook(req.body);
+    console.log('Webhook processado com sucesso');
+    res.status(200).json({ received: true });
+  } catch (error) {
+    console.error('Erro ao processar webhook:', error);
+    // Ainda responda 200 para evitar retentativas
+    res.status(200).json({ received: true, error: error.message });
+  }
+});
+```
+
+## Callback URL vs Webhook
+
+Entenda a diferença entre estas duas configurações:
+
+| | Callback URL | Webhook URL |
+|---|--------------|-------------|
+| **Propósito** | Base URL para página de pagamento | Endpoint para notificações |
+| **Uso** | Gera links de pagamento hospedados | Recebe eventos de pagamento |
+| **Exemplo** | `https://seusite.com` | `https://seusite.com/webhook` |
+| **Retorno** | Página HTML para o cliente | JSON com dados do evento |
+
+Você pode (e deve) configurar ambos para uma experiência completa!

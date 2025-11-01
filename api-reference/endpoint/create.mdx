@@ -1,4 +1,254 @@
 ---
-title: 'Create Plant'
-openapi: 'POST /plants'
+title: "Criar Pagamento"
+api: "POST https://carteira.nevermiss.com/v1/payment/create"
+description: "Cria uma nova cobrança PIX com QR Code e Copia e Cola"
 ---
+
+## Descrição
+
+Cria uma nova cobrança PIX e retorna QR Code e PIX Copia e Cola para o cliente efetuar o pagamento. A plataforma cobra **6.99%** de taxa sobre o valor.
+
+## Headers
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token com sua API Key
+</ParamField>
+
+<ParamField header="Content-Type" type="string" required>
+  Deve ser `application/json`
+</ParamField>
+
+## Body
+
+<ParamField body="amount" type="number" required>
+  Valor do pagamento em reais (ex: 10.50)
+</ParamField>
+
+<ParamField body="description" type="string" required>
+  Descrição da cobrança que aparecerá para o cliente
+</ParamField>
+
+<ParamField body="redirectUrl" type="string">
+  URL para redirecionar o cliente após o pagamento ser confirmado
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Indica se a operação foi bem-sucedida
+</ResponseField>
+
+<ResponseField name="transaction" type="object">
+  Informações da transação criada
+  
+  <Expandable title="properties">
+    <ResponseField name="txid" type="string">
+      ID único da transação
+    </ResponseField>
+    
+    <ResponseField name="amount" type="number">
+      Valor total do pagamento
+    </ResponseField>
+    
+    <ResponseField name="fee" type="number">
+      Taxa da plataforma (6.99%)
+    </ResponseField>
+    
+    <ResponseField name="netAmount" type="number">
+      Valor líquido que você receberá
+    </ResponseField>
+    
+    <ResponseField name="status" type="string">
+      Status inicial: `pending`
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="pixCopiaECola" type="string">
+  Código PIX Copia e Cola para pagamento
+</ResponseField>
+
+<ResponseField name="qrcode" type="object">
+  QR Code em Base64 para exibição
+  
+  <Expandable title="properties">
+    <ResponseField name="imagemQrcode" type="string">
+      Imagem QR Code em Base64
+    </ResponseField>
+    
+    <ResponseField name="qrcodeBase64" type="string">
+      Imagem QR Code em Base64 (mesmo valor)
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="paymentLink" type="string">
+  Link para página de pagamento (somente se callbackUrl configurada)
+</ResponseField>
+
+<RequestExample>
+
+```bash cURL
+curl -X POST https://carteira.nevermiss.com/v1/payment/create \
+  -H "Authorization: Bearer SUA_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "amount": 49.90,
+    "description": "Plano Premium - Mensal",
+    "redirectUrl": "https://exemplo.com/sucesso"
+  }'
+```
+
+```javascript Node.js
+const response = await fetch('https://carteira.nevermiss.com/v1/payment/create', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer SUA_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    amount: 49.90,
+    description: 'Plano Premium - Mensal',
+    redirectUrl: 'https://exemplo.com/sucesso'
+  })
+});
+
+const payment = await response.json();
+console.log(payment);
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://carteira.nevermiss.com/v1/payment/create',
+    headers={
+        'Authorization': 'Bearer SUA_API_KEY',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'amount': 49.90,
+        'description': 'Plano Premium - Mensal',
+        'redirectUrl': 'https://exemplo.com/sucesso'
+    }
+)
+
+payment = response.json()
+print(payment)
+```
+
+```php PHP
+<?php
+$ch = curl_init('https://carteira.nevermiss.com/v1/payment/create');
+
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer SUA_API_KEY',
+    'Content-Type: application/json'
+]);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+    'amount' => 49.90,
+    'description' => 'Plano Premium - Mensal',
+    'redirectUrl' => 'https://exemplo.com/sucesso'
+]));
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+$payment = curl_exec($ch);
+curl_close($ch);
+
+echo $payment;
+?>
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Sucesso (201)
+{
+  "success": true,
+  "transaction": {
+    "txid": "ABC123XYZ",
+    "amount": 49.90,
+    "fee": 3.49,
+    "netAmount": 46.41,
+    "status": "pending"
+  },
+  "pixCopiaECola": "00020126580014br.gov.bcb.pix...",
+  "qrcode": {
+    "imagemQrcode": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
+    "qrcodeBase64": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
+  },
+  "paymentLink": "https://carteira.nevermiss.com/pay/ABC123XYZ"
+}
+```
+
+```json Erro - Valor inválido (400)
+{
+  "error": "Bad Request",
+  "message": "Invalid amount value"
+}
+```
+
+```json Erro - Descrição faltando (400)
+{
+  "error": "Bad Request",
+  "message": "Description is required"
+}
+```
+
+</ResponseExample>
+
+## Observações Importantes
+
+<Note>
+**Payment Link**: O campo `paymentLink` só é retornado se você tiver configurado uma `callbackUrl` através do endpoint `/v1/register`. Este link oferece uma página pronta para o cliente pagar com sua marca personalizada.
+</Note>
+
+<Tip>
+**Taxa de 6.99%**: A taxa é fixa e deduzida automaticamente do valor recebido. Por exemplo:
+- Pagamento de R$ 100,00
+- Taxa: R$ 6,99
+- Você recebe: R$ 93,01
+</Tip>
+
+<Warning>
+**Todos os pagamentos são reais**: Não há ambiente de testes. Certifique-se de testar com valores pequenos se necessário.
+</Warning>
+
+## Fluxo Recomendado
+
+<Steps>
+  <Step title="Cliente solicita pagamento">
+    Usuário clica em "Pagar" no seu site/app
+  </Step>
+  
+  <Step title="Crie a cobrança">
+    Chame este endpoint com amount e description
+  </Step>
+  
+  <Step title="Exiba o pagamento">
+    **Opção A**: Redirecione para o `paymentLink` (página pronta)
+    
+    **Opção B**: Exiba o QR Code (`qrcodeBase64`) no seu site
+  </Step>
+  
+  <Step title="Aguarde confirmação">
+    **Opção A**: Configure webhook e receba notificação automática
+    
+    **Opção B**: Faça polling com `GET /v1/payment/status/:txid`
+  </Step>
+  
+  <Step title="Libere o acesso">
+    Após confirmar status `approved`, libere produto/serviço
+  </Step>
+</Steps>
+
+## Erros Comuns
+
+| Código | Causa | Solução |
+|--------|-------|---------|
+| 400 | Valor inválido ou negativo | Envie um valor numérico positivo |
+| 400 | Descrição faltando | Inclua o campo `description` |
+| 401 | API Key inválida | Verifique o header Authorization |
+| 500 | Erro ao gerar cobrança | Tente novamente ou contate suporte |
