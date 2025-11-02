@@ -1,424 +1,61 @@
-------------------
-
-title: "Introdução à API"
-
-description: "Referência completa da API Carteira NeverMiss v1"title: 'API Reference'
-
 ---
-
-description: 'Documentação completa da API Carteira NeverMiss'title: "Introdução à API"
+title: "Introdução à API"
+description: "Referência completa da API Carteira NeverMiss v1"
+---
 
 ## Base URL
-
----
 
 Todas as requisições da API devem ser feitas para:
 
-description: "Referência completa da API Carteira NeverMiss v1"title: "Introdução à API"
-
 ```
-
-https://carteira.nevermissapps.com/v1## Base URL
-
+https://carteira.nevermissapps.com/v1
 ```
-
----
 
 ## Autenticação
 
-```
-
 Todas as requisições requerem autenticação via API Key no header:
 
-https://carteira.nevermissapps.com/v1description: "Referência completa da API Carteira NeverMiss v1"title: "Introdução à API"title: 'Introduction'
-
 ```
-
-Authorization: Bearer SUA_API_KEY```
-
+Authorization: Bearer SUA_API_KEY
 ```
-
-## Base URL
 
 <Card title="Saiba mais sobre autenticação" icon="key" href="/essentials/authentication">
-
-  Veja detalhes completos sobre como obter e usar sua API Key## Autenticação
-
+  Veja detalhes completos sobre como obter e usar sua API Key
 </Card>
-
----
 
 ## Endpoints Disponíveis
 
-Todas as requisições requerem autenticação via API Key no header:
-
 <CardGroup cols={2}>
-
-  <Card title="Criar Pagamento" icon="plus" href="/api-reference/endpoint/create">Todas as requisições da API devem ser feitas para:
-
+  <Card title="Criar Pagamento" icon="plus" href="/api-reference/endpoint/create">
     POST /v1/payment/create
+  </Card>
 
-  </Card>```bash
-
-
-
-  <Card title="Verificar Status" icon="magnifying-glass" href="/api-reference/endpoint/get">Authorization: Bearer SUA_API_KEYdescription: "Referência completa da API Carteira NeverMiss v1"description: 'Example section for showcasing API endpoints'
-
+  <Card title="Verificar Status" icon="magnifying-glass" href="/api-reference/endpoint/get">
     GET /v1/payment/status/:txid
+  </Card>
 
-  </Card>```
-
-
-
-  <Card title="Reembolsar" icon="rotate-left" href="/api-reference/endpoint/refund">```
-
+  <Card title="Reembolsar" icon="rotate-left" href="/api-reference/endpoint/refund">
     POST /v1/refund
+  </Card>
 
-  </Card>## Endpoints Disponíveis
-
-
-
-  <Card title="Consultar Saldo" icon="wallet" href="/api-reference/endpoint/balance">https://carteira.nevermissapps.com/v1## Base URL
-
+  <Card title="Consultar Saldo" icon="wallet" href="/api-reference/endpoint/balance">
     GET /v1/balance
-
-  </Card><CardGroup cols={2}>
-
-
-
-  <Card title="Solicitar Saque" icon="money-bill-transfer" href="/api-reference/endpoint/withdraw">  <Card title="Criar Pagamento" icon="plus" href="/api-reference/endpoint/create">```
-
-    POST /v1/withdraw
-
-  </Card>    POST /v1/payment/create
-
-
-
-  <Card title="Configurar Registro" icon="gear" href="/api-reference/endpoint/register">  </Card>------
-
-    POST /v1/register
-
-  </Card>  
-
-
-
-  <Card title="Listar Transações" icon="list" href="/api-reference/endpoint/transactions">  <Card title="Verificar Status" icon="magnifying-glass" href="/api-reference/endpoint/get">## Autenticação
-
-    GET /v1/transactions
-
-  </Card>    GET /v1/payment/status/:txid
-
-
-
-  <Card title="Detalhes da Transação" icon="file-lines" href="/api-reference/endpoint/transaction-detail">  </Card>Todas as requisições da API devem ser feitas para:
-
-    GET /v1/transactions/:txid
-
-  </Card>  
-
-</CardGroup>
-
-  <Card title="Realizar Reembolso" icon="rotate-left" href="/api-reference/endpoint/refund">Todas as requisições requerem autenticação via API Key no header:
-
-## Taxas
-
-    POST /v1/refund
-
-- **Pagamentos**: 6.99% sobre o valor
-
-- **Saque Normal**: R$ 0,50 (24h)  </Card>
-
-- **Saque Turbo**: R$ 2,50 (instantâneo)
-
-  
-
-## Rate Limits
-
-  <Card title="Consultar Saldo" icon="wallet" href="/api-reference/endpoint/balance">```
-
-- **Geral**: 60 req/min
-
-- **POST /v1/register**: 30s entre requisições    GET /v1/balance
-
-
-
-<Card title="Saiba mais" icon="gauge" href="/essentials/rate-limits">  </Card>Authorization: Bearer SUA_API_KEY```
-
-  Detalhes sobre rate limits
-
-</Card>  
-
-
-
----  <Card title="Solicitar Saque" icon="money-bill-transfer" href="/api-reference/endpoint/withdraw">```
-
-
-
-## Sobre a Plataforma    POST /v1/withdraw
-
-
-
-<Info>  </Card>https://carteira.nevermissapps.com/v1## Base URL<Note>
-
-**Potencializado por Cube Hosting**: A NeverMiss Apps utiliza a infraestrutura e serviços da **Cube Hosting LTDA** para garantir segurança, estabilidade e processamento de pagamentos.
-
-</Info>  
-
-
-
-<Warning>  <Card title="Configurar Conta" icon="gear" href="/api-reference/endpoint/register"><Card title="Saiba mais sobre autenticação" icon="key" href="/essentials/authentication">
-
-**Intermediação Financeira**: Todos os pagamentos serão processados e efetuados pela **CUBE HOSTING LTDA**, pessoa jurídica de direito privado, inscrita no CNPJ sob nº **62.429.632/0001-22**, responsável pela intermediação financeira e gestão da plataforma.
-
-</Warning>    POST /v1/register
-
-
-  </Card>  Veja detalhes completos sobre como obter e usar sua API Key```
-
-  
-
-  <Card title="Listar Transações" icon="list" href="/api-reference/endpoint/transactions"></Card>
-
-    GET /v1/transactions
-
-  </Card>  If you're not looking to build API reference documentation, you can delete
-
-  
-
-  <Card title="Detalhes da Transação" icon="file-lines" href="/api-reference/endpoint/transaction-detail">## Endpoints Disponíveis
-
-    GET /v1/transactions/:txid
-
-  </Card>## Autenticação
-
-</CardGroup>
-
-<CardGroup cols={2}>
-
-## Taxas
-
-  <Card title="Criar Pagamento" icon="plus" href="/api-reference/endpoint/create">Todas as requisições da API devem ser feitas para:  this section by removing the api-reference folder.
-
-- **Pagamentos**: 6.99% sobre o valor
-
-- **Saque Normal**: R$ 0,50 (24h)    `POST /v1/payment/create`
-
-- **Saque Turbo**: R$ 2,50 (instantâneo)
-
-  </Card>Todas as requisições requerem autenticação via API Key no header:
-
-## Rate Limits
-
-  
-
-- **Geral**: 60 requisições por minuto
-
-- **POST /v1/register**: 30 segundos entre requisições  <Card title="Verificar Status" icon="magnifying-glass" href="/api-reference/endpoint/get"></Note>
-
-
-
-<Info>    `GET /v1/payment/status/:txid`
-
-A NeverMiss Apps é potencializada pela [Cube Hosting](https://cubehosting.com.br).
-
-</Info>  </Card>```
-
-
-  
-
-  <Card title="Reembolsar" icon="rotate-left" href="/api-reference/endpoint/refund">Authorization: Bearer SUA_API_KEY```
-
-    `POST /v1/refund`
-
-  </Card>```
-
-  
-
-  <Card title="Consultar Saldo" icon="wallet" href="/api-reference/endpoint/balance">https://carteira.nevermissapps.com/v1## Welcome
-
-    `GET /v1/balance`
-
-  </Card><Card title="Saiba mais sobre autenticação" icon="key" href="/essentials/authentication">
-
-  
-
-  <Card title="Solicitar Saque" icon="money-bill-transfer" href="/api-reference/endpoint/withdraw">  Veja detalhes completos sobre como obter e usar sua API Key```
-
-    `POST /v1/withdraw`
-
-  </Card></Card>
-
-  
-
-  <Card title="Configurar Registro" icon="gear" href="/api-reference/endpoint/register">There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
-
-    `POST /v1/register`
-
-  </Card>## Endpoints Disponíveis
-
-  
-
-  <Card title="Listar Transações" icon="list" href="/api-reference/endpoint/transactions">## Autenticação
-
-    `GET /v1/transactions`
-
-  </Card><CardGroup cols={2}>
-
-  
-
-  <Card title="Detalhes da Transação" icon="file-lines" href="/api-reference/endpoint/transaction-detail">  <Card title="Criar Pagamento" icon="plus" href="/api-reference/endpoint/create"><Card
-
-    `GET /v1/transactions/:txid`
-
-  </Card>    `POST /v1/payment/create`
-
-</CardGroup>
-
-  </Card>Todas as requisições requerem autenticação via API Key no header:  title="Plant Store Endpoints"
-
-## Taxas
-
-  
-
-- **Pagamentos**: 6.99% sobre o valor
-
-- **Saque Normal**: R$ 0,50 (24h)  <Card title="Verificar Status" icon="magnifying-glass" href="/api-reference/endpoint/get">  icon="leaf"
-
-- **Saque Turbo**: R$ 2,50 (instantâneo)
-
-    `GET /v1/payment/status/:txid`
-
-## Rate Limits
-
-  </Card>```  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
-
-- **Geral**: 60 req/min
-
-- **POST /v1/register**: 30s entre requisições  
-
-
-
-<Card title="Saiba mais" icon="gauge" href="/essentials/rate-limits">  <Card title="Reembolsar" icon="rotate-left" href="/api-reference/endpoint/refund">Authorization: Bearer SUA_API_KEY>
-
-  Detalhes sobre rate limits
-
-</Card>    `POST /v1/refund`
-
-
-
----  </Card>```  View the OpenAPI specification file
-
-
-
-## Sobre a Plataforma  
-
-
-
-<Info>  <Card title="Consultar Saldo" icon="wallet" href="/api-reference/endpoint/balance"></Card>
-
-**Potencializado por Cube Hosting**: A NeverMiss Apps utiliza a infraestrutura e serviços da **Cube Hosting LTDA** para garantir segurança, estabilidade e processamento de pagamentos.
-
-</Info>    `GET /v1/balance`
-
-
-
-<Warning>  </Card><Card title="Saiba mais sobre autenticação" icon="key" href="/essentials/authentication">
-
-**Intermediação Financeira**: Todos os pagamentos serão processados e efetuados pela **CUBE HOSTING LTDA**, pessoa jurídica de direito privado, inscrita no CNPJ sob nº **62.429.632/0001-22**, responsável pela intermediação financeira e gestão da plataforma.
-
-</Warning>  
-
-
-  <Card title="Solicitar Saque" icon="money-bill-transfer" href="/api-reference/endpoint/withdraw">  Veja detalhes completos sobre como obter e usar sua API Key## Authentication
-
-    `POST /v1/withdraw`
-
-  </Card></Card>
-
-  
-
-  <Card title="Configurar Registro" icon="gear" href="/api-reference/endpoint/register">All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
-
-    `POST /v1/register`
-
-  </Card>## Endpoints Disponíveis
-
-  
-
-  <Card title="Listar Transações" icon="list" href="/api-reference/endpoint/transactions">```json
-
-    `GET /v1/transactions`
-
-  </Card><CardGroup cols={2}>"security": [
-
-  
-
-  <Card title="Detalhes da Transação" icon="file-lines" href="/api-reference/endpoint/transaction-detail">  <Card title="Criar Pagamento" icon="plus" href="/api-reference/endpoint/create">  {
-
-    `GET /v1/transactions/:txid`
-
-  </Card>    `POST /v1/payment/create`    "bearerAuth": []
-
-</CardGroup>
-
-  </Card>  }
-
-## Taxas
-
-  ]
-
-- **Pagamentos**: 6.99% sobre o valor
-
-- **Saque Normal**: R$ 0,50 (24h)  <Card title="Verificar Status" icon="magnifying-glass" href="/api-reference/endpoint/get">```
-
-- **Saque Turbo**: R$ 3,50 (instantâneo)
-
-    `GET /v1/payment/status/:txid`
-
-## Rate Limits  </Card>
-
-  
-
-- **Geral**: 60 req/min  <Card title="Reembolsar" icon="rotate-left" href="/api-reference/endpoint/refund">
-
-- **POST /v1/register**: 30s entre requisições    `POST /v1/refund`
-
   </Card>
-
-<Card title="Saiba mais" icon="gauge" href="/essentials/rate-limits">  
-
-  Detalhes sobre rate limits  <Card title="Consultar Saldo" icon="wallet" href="/api-reference/endpoint/balance">
-
-</Card>    `GET /v1/balance`
-
-  </Card>
-
----  
 
   <Card title="Solicitar Saque" icon="money-bill-transfer" href="/api-reference/endpoint/withdraw">
-
-## Sobre a Plataforma    `POST /v1/withdraw`
-
+    POST /v1/withdraw
   </Card>
 
-<Info>  
-
-**Potencializado por Cube Hosting**: A NeverMiss Apps utiliza a infraestrutura e serviços da **Cube Hosting LTDA** para garantir segurança, estabilidade e processamento de pagamentos.  <Card title="Configurar Registro" icon="gear" href="/api-reference/endpoint/register">
-
-</Info>    `POST /v1/register`
-
+  <Card title="Configurar Registro" icon="gear" href="/api-reference/endpoint/register">
+    POST /v1/register
   </Card>
 
-<Warning>  
-
-**Intermediação Financeira**: Todos os pagamentos serão processados e efetuados pela **CUBE HOSTING LTDA**, pessoa jurídica de direito privado, inscrita no CNPJ sob nº **62.429.632/0001-22**, responsável pela intermediação financeira e gestão da plataforma.  <Card title="Listar Transações" icon="list" href="/api-reference/endpoint/transactions">
-
-</Warning>    `GET /v1/transactions`
-
+  <Card title="Listar Transações" icon="list" href="/api-reference/endpoint/transactions">
+    GET /v1/transactions
   </Card>
-  
+
   <Card title="Detalhes da Transação" icon="file-lines" href="/api-reference/endpoint/transaction-detail">
-    `GET /v1/transactions/:txid`
+    GET /v1/transactions/:txid
   </Card>
 </CardGroup>
 
@@ -426,7 +63,7 @@ A NeverMiss Apps é potencializada pela [Cube Hosting](https://cubehosting.com.b
 
 - **Pagamentos**: 6.99% sobre o valor
 - **Saque Normal**: R$ 0,50 (24h)
-- **Saque Turbo**: R$ 3,50 (instantâneo)
+- **Saque Turbo**: R$ 2,50 (instantâneo)
 
 ## Rate Limits
 
@@ -436,3 +73,15 @@ A NeverMiss Apps é potencializada pela [Cube Hosting](https://cubehosting.com.b
 <Card title="Saiba mais" icon="gauge" href="/essentials/rate-limits">
   Detalhes sobre rate limits
 </Card>
+
+---
+
+## Sobre a Plataforma
+
+<Info>
+**Potencializado por Cube Hosting**: A NeverMiss Apps utiliza a infraestrutura e serviços da **Cube Hosting LTDA** para garantir segurança, estabilidade e processamento de pagamentos.
+</Info>
+
+<Warning>
+**Intermediação Financeira**: Todos os pagamentos serão processados e efetuados pela **CUBE HOSTING LTDA**, pessoa jurídica de direito privado, inscrita no CNPJ sob nº **62.429.632/0001-22**, responsável pela intermediação financeira e gestão da plataforma.
+</Warning>
