@@ -1,0 +1,349 @@
+---
+title: "Configurar Registro"
+api: "POST https://carteira.nevermissapps.com/v1/register"
+description: "Configure chave PIX, saque automático, dados da empresa, webhook e callback URL"
+---
+
+## Descrição
+
+Configura ou atualiza suas informações: chave PIX para saques, saque automático, dados da empresa (nome, logo e cor), webhook URL e callback URL. **Todos os campos são opcionais**.
+
+<Note>
+**Prefere interface visual?** Você pode configurar todas essas opções através do [Dashboard - Configurações](https://nevermissapps.com/dashboard/configuracoes) sem precisar usar a API.
+</Note>
+
+<Warning>
+**Rate Limit**: Este endpoint tem limite de **30 segundos** entre requisições
+</Warning>
+
+## Headers
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token com sua API Key
+</ParamField>
+
+<ParamField header="Content-Type" type="string" required>
+  Deve ser `application/json`
+</ParamField>
+
+## Body (todos campos opcionais)
+
+<ParamField body="pixKey" type="string">
+  Sua chave PIX para receber saques
+</ParamField>
+
+<ParamField body="pixKeyType" type="string">
+  Tipo da chave: `CPF`, `CNPJ`, `EMAIL`, `PHONE`, `EVP`
+</ParamField>
+
+<ParamField body="autoWithdrawal" type="boolean">
+  `true`: saque automático diário às 23:59 | `false`: saques manuais
+</ParamField>
+
+<ParamField body="companyName" type="string">
+  Nome da sua empresa (exibido na página de pagamento)
+</ParamField>
+
+<ParamField body="companyLogo" type="string">
+  URL da logo da sua empresa (exibida na página de pagamento)
+</ParamField>
+
+<ParamField body="companyColor" type="string">
+  Cor principal da sua empresa em hexadecimal (ex: `#7C3AED`)
+</ParamField>
+
+<ParamField body="webhookUrl" type="string">
+  URL para receber notificações de pagamentos aprovados
+</ParamField>
+
+<ParamField body="callbackUrl" type="string">
+  URL base para gerar links de página de pagamento
+</ParamField>
+
+## Detalhes dos Campos
+
+<AccordionGroup>
+  <Accordion title="pixKey e pixKeyType" icon="key">
+    Devem ser enviados **juntos** ou omitidos juntos.
+    
+    **Tipos aceitos:**
+    - `CPF`: 11 dígitos (ex: `"12345678900"`)
+    - `CNPJ`: 14 dígitos (ex: `"12345678000100"`)
+    - `EMAIL`: Email válido (ex: `"seu@email.com"`)
+    - `PHONE`: Formato E.164 (ex: `"+5511999999999"`)
+    - `EVP`: Chave aleatória/UUID
+    
+    Pode ser atualizada a qualquer momento (respeitando rate limit de 30s).
+  </Accordion>
+  
+  <Accordion title="autoWithdrawal" icon="clock">
+    **true**: Saque automático ativado
+    - Saldo é sacado todo dia às 23:59 (horário de Brasília)
+    - Somente após 24h de cada pagamento aprovado
+    - Taxa: R$ 0,50 (mesmo do saque normal)
+    - Saques manuais ficam bloqueados
+    
+    **false**: Saque manual
+    - Você controla quando sacar via `POST /v1/withdraw`
+  </Accordion>
+  
+  <Accordion title="companyName" icon="building">
+    Nome da sua empresa/serviço exibido na página de pagamento.
+    
+    Se não configurado, usa "Cliente" por padrão.
+  </Accordion>
+  
+  <Accordion title="companyLogo" icon="image">
+    URL pública da logo da sua empresa.
+    
+    - Exibida no topo da página de pagamento
+    - Formatos: PNG, JPG, SVG
+    - Recomendado: fundo transparente, 200x200px
+  </Accordion>
+  
+  <Accordion title="companyColor" icon="palette">
+    Cor principal da sua empresa em formato hexadecimal.
+    
+    - Usada na página de pagamento para botões e elementos de destaque
+    - Formato: `#RRGGBB` (ex: `#7C3AED`, `#10B981`)
+    - Se não configurado, usa a cor padrão da plataforma
+  </Accordion>
+  
+  <Accordion title="webhookUrl" icon="webhook">
+    URL do seu servidor para receber notificações POST quando pagamento é aprovado.
+    
+    **Payload enviado:**
+    ```json
+    {
+      "event": "payment.approved",
+      "txid": "ABC123XYZ",
+      "amount": 10.50,
+      "netAmount": 9.77,
+      "fee": 0.73,
+      "timestamp": 1698765432000
+    }
+    ```
+    
+    Veja mais em [Webhooks](/essentials/webhooks)
+  </Accordion>
+  
+  <Accordion title="callbackUrl" icon="link">
+    URL base do seu sistema.
+    
+    Quando configurada:
+    - Habilita geração de `paymentLink` ao criar pagamentos
+    - Sistema gera: `https://carteira.nevermissapps.com/pay/{txid}`
+    - Página customizada com sua logo e nome
+    - Redireciona cliente após pagamento (se `redirectUrl` fornecida)
+  </Accordion>
+</AccordionGroup>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Indica sucesso
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Mensagem descrevendo o que foi configurado
+</ResponseField>
+
+<ResponseField name="user" type="object">
+  Suas configurações atualizadas
+  
+  <Expandable title="properties">
+    <ResponseField name="userId" type="string">
+      Seu ID de usuário
+    </ResponseField>
+    
+    <ResponseField name="pixKey" type="string">
+      Chave PIX configurada
+    </ResponseField>
+    
+    <ResponseField name="pixKeyType" type="string">
+      Tipo da chave
+    </ResponseField>
+    
+    <ResponseField name="autoWithdrawalEnabled" type="boolean">
+      Se saque automático está ativo
+    </ResponseField>
+    
+    <ResponseField name="companyName" type="string">
+      Nome da empresa configurado
+    </ResponseField>
+    
+    <ResponseField name="webhookConfigured" type="boolean">
+      Se webhook está configurado
+    </ResponseField>
+    
+    <ResponseField name="callbackConfigured" type="boolean">
+      Se callback está configurado
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<RequestExample>
+
+```bash Configuração Completa
+curl -X POST https://carteira.nevermissapps.com/v1/register \
+  -H "Authorization: Bearer SUA_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "pixKey": "empresa@example.com",
+    "pixKeyType": "EMAIL",
+    "companyName": "Minha Loja",
+    "companyLogo": "https://exemplo.com/logo.png",
+    "webhookUrl": "https://exemplo.com/webhook",
+    "callbackUrl": "https://exemplo.com"
+  }'
+```
+
+```bash Apenas Chave PIX
+curl -X POST https://carteira.nevermissapps.com/v1/register \
+  -H "Authorization: Bearer SUA_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "pixKey": "12345678900",
+    "pixKeyType": "CPF"
+  }'
+```
+
+```bash Ativar Saque Automático
+curl -X POST https://carteira.nevermissapps.com/v1/register \
+  -H "Authorization: Bearer SUA_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"autoWithdrawal": true}'
+```
+
+```javascript Node.js
+const response = await fetch('https://carteira.nevermissapps.com/v1/register', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer SUA_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    pixKey: 'empresa@example.com',
+    pixKeyType: 'EMAIL',
+    companyName: 'Minha Loja',
+    companyLogo: 'https://exemplo.com/logo.png',
+    webhookUrl: 'https://exemplo.com/webhook',
+    callbackUrl: 'https://exemplo.com'
+  })
+});
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://carteira.nevermissapps.com/v1/register',
+    headers={
+        'Authorization': 'Bearer SUA_API_KEY',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'pixKey': 'empresa@example.com',
+        'pixKeyType': 'EMAIL',
+        'companyName': 'Minha Loja',
+        'companyLogo': 'https://exemplo.com/logo.png',
+        'webhookUrl': 'https://exemplo.com/webhook',
+        'callbackUrl': 'https://exemplo.com'
+    }
+)
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Sucesso (200)
+{
+  "success": true,
+  "message": "Registro concluído com sucesso. Chave PIX configurada. Callback URL configurada - Links de pagamento habilitados",
+  "user": {
+    "userId": "123456789",
+    "pixKey": "empresa@example.com",
+    "pixKeyType": "EMAIL",
+    "autoWithdrawalEnabled": false,
+    "companyName": "Minha Loja",
+    "webhookConfigured": true,
+    "callbackConfigured": true
+  }
+}
+```
+
+```json Erro - Chave PIX inválida (400)
+{
+  "error": "Bad Request",
+  "message": "Invalid PIX key for the specified type"
+}
+```
+
+```json Erro - Rate Limit (429)
+{
+  "error": "Too Many Requests",
+  "message": "Rate limit exceeded. Please try again in 30 seconds",
+  "retryAfter": 30
+}
+```
+
+</ResponseExample>
+
+## Exemplos de Uso
+
+### 1. Setup Inicial Completo
+
+```javascript
+await fetch('https://carteira.nevermissapps.com/v1/register', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer SUA_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    pixKey: 'empresa@example.com',
+    pixKeyType: 'EMAIL',
+    companyName: 'Minha Empresa',
+    companyLogo: 'https://empresa.com/logo.png',
+    companyColor: '#7C3AED',
+    webhookUrl: 'https://empresa.com/api/webhook',
+    callbackUrl: 'https://empresa.com'
+  })
+});
+```
+
+### 2. Apenas Atualizar Webhook
+
+```javascript
+await fetch('https://carteira.nevermissapps.com/v1/register', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer SUA_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    webhookUrl: 'https://novo-webhook.com/api/payments'
+  })
+});
+```
+
+### 3. Remover Chave PIX
+
+```javascript
+await fetch('https://carteira.nevermissapps.com/v1/register', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer SUA_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    pixKey: null,
+    pixKeyType: null
+  })
+});
+```
+
+<Tip>
+**Configure tudo de uma vez**: É mais eficiente configurar todos os campos necessários em uma única chamada do que fazer múltiplas chamadas, considerando o rate limit de 30s.
+</Tip>

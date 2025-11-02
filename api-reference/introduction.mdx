@@ -1,33 +1,83 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: "Introdução à API"
+description: "Referência completa da API Carteira NeverMiss v1"
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+## Base URL
 
-## Welcome
+Todas as requisições da API devem ser feitas para:
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+```
+https://carteira.nevermissapps.com/v1
+```
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
+## Autenticação
+
+Todas as requisições requerem autenticação via API Key no header:
+
+```
+Authorization: Bearer SUA_API_KEY
+```
+
+<Card title="Saiba mais sobre autenticação" icon="key" href="/essentials/authentication">
+  Veja detalhes completos sobre como obter e usar sua API Key
 </Card>
 
-## Authentication
+## Endpoints Disponíveis
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+<CardGroup cols={2}>
+  <Card title="Criar Pagamento" icon="plus" href="/api-reference/endpoint/create">
+    POST /v1/payment/create
+  </Card>
 
-```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
-```
+  <Card title="Verificar Status" icon="magnifying-glass" href="/api-reference/endpoint/get">
+    GET /v1/payment/status/:txid
+  </Card>
+
+  <Card title="Reembolsar" icon="rotate-left" href="/api-reference/endpoint/refund">
+    POST /v1/refund
+  </Card>
+
+  <Card title="Consultar Saldo" icon="wallet" href="/api-reference/endpoint/balance">
+    GET /v1/balance
+  </Card>
+
+  <Card title="Solicitar Saque" icon="money-bill-transfer" href="/api-reference/endpoint/withdraw">
+    POST /v1/withdraw
+  </Card>
+
+  <Card title="Configurar Registro" icon="gear" href="/api-reference/endpoint/register">
+    POST /v1/register
+  </Card>
+
+  <Card title="Listar Transações" icon="list" href="/api-reference/endpoint/transactions">
+    GET /v1/transactions
+  </Card>
+
+  <Card title="Detalhes da Transação" icon="file-lines" href="/api-reference/endpoint/transaction-detail">
+    GET /v1/transactions/:txid
+  </Card>
+</CardGroup>
+
+## Taxas
+
+- **Pagamentos**: 6.99% sobre o valor
+- **Saque Normal**: R$ 0,50 (24h)
+- **Saque Turbo**: R$ 3,50 (instantâneo)
+
+## Rate Limits
+
+- **Geral**: 60 req/min
+- **POST /v1/register**: 30s entre requisições
+
+<Card title="Saiba mais" icon="gauge" href="/essentials/rate-limits">
+  Detalhes sobre rate limits
+</Card>
+
+---
+
+## Sobre a Plataforma
+
+<Info>
+Todos os pagamentos serão processados e efetuados pela **CUBE HOSTING LTDA**, pessoa jurídica de direito privado, inscrita no CNPJ sob nº **62.429.632/0001-22**, responsável pela intermediação financeira e gestão da plataforma.
+</Info>

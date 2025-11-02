@@ -1,97 +1,184 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: "Bem-vindo à NeverMiss Apps"
+description: "Documentação completa dos produtos e APIs da NeverMiss Apps"
 ---
 
-## Setting up
+## Sobre a NeverMiss Apps
 
-Get your documentation site up and running in minutes.
+A **NeverMiss Apps** é uma plataforma de soluções digitais que oferece ferramentas poderosas e APIs para desenvolvedores e empresas. Nosso objetivo é simplificar processos complexos e permitir que você foque no que realmente importa: seu negócio.
+
+<Note>
+A NeverMiss Apps utiliza a infraestrutura da **Cube Hosting LTDA** para garantir segurança, estabilidade e confiabilidade em todas as operações.
+</Note>
+
+## Nossos Produtos
+
+<CardGroup cols={2}>
+  <Card
+    title="Carteira"
+    icon="wallet"
+    href="/quickstart"
+  >
+    API completa para integração de pagamentos PIX. Crie cobranças, receba pagamentos e gerencie saques automaticamente.
+  </Card>
+  
+  <Card
+    title="Em breve"
+    icon="rocket"
+    color="#gray"
+  >
+    A documentação dos nossos restantes produtos será adicionada em breve.
+  </Card>
+</CardGroup>
+
+---
+
+## Carteira - Pagamentos PIX
+
+Integre pagamentos PIX em sua aplicação de forma simples e segura.
+
+### Principais recursos
+
+<CardGroup cols={2}>
+  <Card
+    title="Pagamentos PIX"
+    icon="qrcode"
+    href="/api-reference/endpoint/create"
+  >
+    Crie cobranças PIX com QR Code e Copia e Cola automaticamente
+  </Card>
+  <Card
+    title="Webhooks"
+    icon="webhook"
+    href="/essentials/webhooks"
+  >
+    Receba notificações em tempo real sobre pagamentos aprovados
+  </Card>
+  <Card
+    title="Saques Automáticos"
+    icon="money-bill-transfer"
+    href="/api-reference/endpoint/withdraw"
+  >
+    Configure saques automáticos ou solicite manualmente quando precisar
+  </Card>
+  <Card
+    title="Página de Pagamento"
+    icon="browser"
+    href="/essentials/webhooks"
+  >
+    Use nossa página de pagamento customizável ou integre no seu site
+  </Card>
+</CardGroup>
+
+### Começar com a Carteira
 
 <Card
-  title="Start here"
+  title="Guia de Início Rápido"
   icon="rocket"
   href="/quickstart"
   horizontal
 >
-  Follow our three step quickstart guide.
+  Configure sua primeira integração em minutos
 </Card>
 
-## Make it yours
+### Informações importantes
 
-Design a docs site that looks great and empowers your users.
+<AccordionGroup>
+  <Accordion icon="percent" title="Taxa de serviço">
+    A plataforma cobra **6.99%** sobre o valor de cada transação. Esta taxa é deduzida automaticamente do valor recebido.
+    
+    Exemplo: Pagamento de R$ 100,00
+    - Taxa: R$ 6,99
+    - Você recebe: R$ 93,01
+  </Accordion>
+  
+  <Accordion icon="clock" title="Taxa de saque">
+    Dois tipos de saque disponíveis:
+    - **Normal**: R$ 0,50 - Processado em até 24 horas
+    - **Turbo**: R$ 3,50 - Processado instantaneamente
+    
+    Valor mínimo para saque: R$ 5,00
+  </Accordion>
+  
+  <Accordion icon="gauge" title="Rate limits">
+    - **Geral**: 60 requisições por minuto
+    - **Atualização de registro**: 30 segundos entre requisições
+  </Accordion>
+  
+  <Accordion icon="key" title="Autenticação">
+    Todas as requisições precisam do header:
+    ```
+    Authorization: Bearer SUA_API_KEY
+    ```
+  </Accordion>
+</AccordionGroup>
 
-<Columns cols={2}>
+### Base URL - Carteira
+
+```
+https://carteira.nevermissapps.com/v1
+```
+
+### Casos de uso
+
+<CardGroup cols={2}>
   <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
+    title="E-commerce"
+    icon="cart-shopping"
   >
-    Edit your docs locally and preview them in real time.
+    Integre pagamentos PIX no checkout da sua loja virtual
   </Card>
   <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
+    title="SaaS"
+    icon="cloud"
   >
-    Customize the design and colors of your site to match your brand.
-  </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+    Cobre assinaturas e planos com pagamento via PIX
   </Card>
   <Card
-    title="API documentation"
-    icon="terminal"
+    title="Marketplaces"
+    icon="store"
+  >
+    Gerencie pagamentos entre compradores e vendedores
+  </Card>
+  <Card
+    title="Serviços Digitais"
+    icon="laptop-code"
+  >
+    Monetize produtos digitais, cursos e conteúdos
+  </Card>
+</CardGroup>
+
+---
+
+## Recursos e Suporte
+
+<CardGroup cols={2}>
+  <Card
+    title="Documentação da API"
+    icon="code"
     href="/api-reference/introduction"
   >
-    Auto-generate API documentation from OpenAPI specifications.
-  </Card>
-</Columns>
-
-## Create beautiful pages
-
-Everything you need to create world-class documentation.
-
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
+    Explore todos os endpoints da Carteira
   </Card>
   <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
+    title="Discord"
+    icon="discord"
+    href="https://discord.gg/ytYcv4ETJQ"
   >
-    Add sample code to demonstrate how to use your product.
+    Entre na nossa comunidade
   </Card>
   <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
+    title="Dashboard"
+    icon="square-terminal"
+    href="https://nevermissapps.com/dashboard"
   >
-    Display images and other media.
+    Acesse o painel de controle
   </Card>
   <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
+    title="Suporte"
+    icon="envelope"
+    href="mailto:apps@cubehosting.com"
   >
-    Write once and reuse across your docs.
+    Entre em contato conosco
   </Card>
-</Columns>
-
-## Need inspiration?
-
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+</CardGroup>

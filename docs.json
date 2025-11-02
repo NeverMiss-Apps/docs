@@ -1,68 +1,76 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "NeverMiss Apps",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#7C3AED",
+    "light": "#A78BFA",
+    "dark": "#5B21B6"
   },
   "favicon": "/favicon.svg",
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Início",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Bem-vindo",
             "pages": [
-              "index",
-              "quickstart",
-              "development"
-            ]
-          },
-          {
-            "group": "Customization",
-            "pages": [
-              "essentials/settings",
-              "essentials/navigation"
-            ]
-          },
-          {
-            "group": "Writing content",
-            "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
-            ]
-          },
-          {
-            "group": "AI tools",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "index"
             ]
           }
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "Carteira",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "Começando",
+            "pages": [
+              "quickstart"
+            ]
+          },
+          {
+            "group": "Conceitos",
+            "pages": [
+              "essentials/authentication",
+              "essentials/rate-limits",
+              "essentials/webhooks",
+              "essentials/errors"
+            ]
+          },
+          {
+            "group": "API - Introdução",
             "pages": [
               "api-reference/introduction"
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "API - Pagamentos",
             "pages": [
-              "api-reference/endpoint/get",
               "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "api-reference/endpoint/get",
+              "api-reference/endpoint/refund"
+            ]
+          },
+          {
+            "group": "API - Saldo e Saques",
+            "pages": [
+              "api-reference/endpoint/balance",
+              "api-reference/endpoint/withdraw"
+            ]
+          },
+          {
+            "group": "API - Configuração",
+            "pages": [
+              "api-reference/endpoint/register"
+            ]
+          },
+          {
+            "group": "API - Transações",
+            "pages": [
+              "api-reference/endpoint/transactions",
+              "api-reference/endpoint/transaction-detail"
             ]
           }
         ]
@@ -71,14 +79,14 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
+          "anchor": "Dashboard",
+          "href": "https://nevermissapps.com/dashboard",
+          "icon": "square-terminal"
         },
         {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
+          "anchor": "Discord",
+          "href": "https://discord.gg/ytYcv4ETJQ",
+          "icon": "discord"
         }
       ]
     }
@@ -90,14 +98,14 @@
   "navbar": {
     "links": [
       {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "label": "Suporte",
+        "href": "mailto:apps@cubehosting.com"
       }
     ],
     "primary": {
       "type": "button",
       "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "href": "https://nevermissapps.com/dashboard"
     }
   },
   "contextual": {
@@ -114,9 +122,7 @@
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "github": "https://github.com/nevermissapps"
     }
   }
 }

@@ -1,0 +1,278 @@
+---
+title: "Solicitar Saque"
+api: "POST https://carteira.nevermissapps.com/v1/withdraw"
+description: "Solicita um saque do saldo disponível para sua chave PIX"
+---
+
+## Descrição
+
+Solicita um saque do seu saldo disponível para a chave PIX cadastrada. Existem dois tipos: **Normal** (R$ 0,50 - 24h) e **Turbo** (R$ 3,50 - instantâneo).
+
+## Headers
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token com sua API Key
+</ParamField>
+
+<ParamField header="Content-Type" type="string" required>
+  Deve ser `application/json`
+</ParamField>
+
+## Body
+
+<ParamField body="turbo" type="boolean" default={false}>
+  `true` para saque turbo (instantâneo), `false` ou omitir para saque normal (24h)
+</ParamField>
+
+## Tipos de Saque
+
+<CardGroup cols={2}>
+  <Card title="Normal" icon="clock">
+    **Taxa**: R$ 0,50
+    
+    **Tempo**: até 24 horas
+    
+    **Mínimo**: R$ 5,00
+  </Card>
+  
+  <Card title="Turbo" icon="bolt">
+    **Taxa**: R$ 3,50
+    
+    **Tempo**: instantâneo
+    
+    **Mínimo**: R$ 5,00
+  </Card>
+</CardGroup>
+
+## Pré-requisitos
+
+<AccordionGroup>
+  <Accordion title="Chave PIX configurada" icon="key">
+    Use `POST /v1/register` para configurar sua chave PIX antes de sacar
+  </Accordion>
+  
+  <Accordion title="Saldo mínimo" icon="wallet">
+    Saldo disponível deve ser de pelo menos R$ 5,00
+  </Accordion>
+  
+  <Accordion title="Sem saque pendente" icon="clock">
+    Não pode haver outro saque em processamento
+  </Accordion>
+  
+  <Accordion title="Saque automático desativado" icon="toggle-off">
+    Se tiver saque automático ativo, desative primeiro
+  </Accordion>
+</AccordionGroup>
+
+## Response - Normal
+
+<ResponseField name="success" type="boolean">
+  Indica sucesso
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Mensagem de confirmação
+</ResponseField>
+
+<ResponseField name="withdrawal" type="object">
+  Detalhes do saque
+  
+  <Expandable title="properties">
+    <ResponseField name="txid" type="string">
+      ID da transação de saque
+    </ResponseField>
+    
+    <ResponseField name="totalBalance" type="number">
+      Saldo total antes do saque
+    </ResponseField>
+    
+    <ResponseField name="frozenBalance" type="number">
+      Valor congelado (MEDs)
+    </ResponseField>
+    
+    <ResponseField name="withdrawnAmount" type="number">
+      Valor do saque
+    </ResponseField>
+    
+    <ResponseField name="fee" type="number">
+      Taxa cobrada
+    </ResponseField>
+    
+    <ResponseField name="netAmount" type="number">
+      Valor líquido que receberá
+    </ResponseField>
+    
+    <ResponseField name="remainingBalance" type="number">
+      Saldo restante
+    </ResponseField>
+    
+    <ResponseField name="pixKey" type="string">
+      Chave PIX de destino
+    </ResponseField>
+    
+    <ResponseField name="type" type="string">
+      Tipo: `normal` ou `turbo`
+    </ResponseField>
+    
+    <ResponseField name="requestedAt" type="number">
+      Timestamp da solicitação
+    </ResponseField>
+    
+    <ResponseField name="scheduledFor" type="number">
+      Quando será processado (só para normal)
+    </ResponseField>
+    
+    <ResponseField name="transferId" type="string">
+      ID da transferência (só para turbo)
+    </ResponseField>
+    
+    <ResponseField name="processedAt" type="number">
+      Quando foi processado (só para turbo)
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<RequestExample>
+
+```bash Saque Normal
+curl -X POST https://carteira.nevermissapps.com/v1/withdraw \
+  -H "Authorization: Bearer SUA_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"turbo": false}'
+```
+
+```bash Saque Turbo
+curl -X POST https://carteira.nevermissapps.com/v1/withdraw \
+  -H "Authorization: Bearer SUA_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"turbo": true}'
+```
+
+```javascript Node.js
+// Saque Normal
+const response = await fetch('https://carteira.nevermissapps.com/v1/withdraw', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer SUA_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ turbo: false })
+});
+
+// Saque Turbo
+const response = await fetch('https://carteira.nevermissapps.com/v1/withdraw', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer SUA_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ turbo: true })
+});
+```
+
+```python Python
+import requests
+
+# Saque Normal
+response = requests.post(
+    'https://carteira.nevermissapps.com/v1/withdraw',
+    headers={
+        'Authorization': 'Bearer SUA_API_KEY',
+        'Content-Type': 'application/json'
+    },
+    json={'turbo': False}
+)
+
+# Saque Turbo
+response = requests.post(
+    'https://carteira.nevermissapps.com/v1/withdraw',
+    headers={
+        'Authorization': 'Bearer SUA_API_KEY',
+        'Content-Type': 'application/json'
+    },
+    json={'turbo': True}
+)
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Sucesso - Normal (200)
+{
+  "success": true,
+  "message": "Saque normal agendado com sucesso! Será processado em até 24 horas",
+  "withdrawal": {
+    "txid": "WD1698765432ABC",
+    "totalBalance": 150.75,
+    "frozenBalance": 0,
+    "withdrawnAmount": 150.75,
+    "fee": 0.50,
+    "netAmount": 150.25,
+    "remainingBalance": 0,
+    "pixKey": "seu@email.com",
+    "type": "normal",
+    "requestedAt": 1698765432000,
+    "scheduledFor": 1698851832000
+  }
+}
+```
+
+```json Sucesso - Turbo (200)
+{
+  "success": true,
+  "message": "Saque turbo processado! O valor será creditado instantaneamente",
+  "withdrawal": {
+    "txid": "WD1698765432ABC",
+    "transferId": "TRF123456",
+    "totalBalance": 150.75,
+    "frozenBalance": 0,
+    "withdrawnAmount": 150.75,
+    "fee": 2.50,
+    "netAmount": 148.25,
+    "remainingBalance": 0,
+    "pixKey": "seu@email.com",
+    "type": "turbo",
+    "processedAt": 1698765432000
+  }
+}
+```
+
+```json Erro - Chave PIX não configurada (400)
+{
+  "error": "Bad Request",
+  "message": "PIX key not configured. Please configure your PIX key first"
+}
+```
+
+```json Erro - Saldo insuficiente (400)
+{
+  "error": "Bad Request",
+  "message": "Insufficient balance. Minimum R$ 5.00 required"
+}
+```
+
+```json Erro - Saque automático ativo (403)
+{
+  "error": "Forbidden",
+  "message": "Cannot withdraw manually when auto-withdrawal is enabled"
+}
+```
+
+```json Erro - Saque pendente (409)
+{
+  "error": "Conflict",
+  "message": "A withdrawal is already pending"
+}
+```
+
+</ResponseExample>
+
+## Erros Comuns
+
+| Código | Causa | Solução |
+|--------|-------|---------|
+| 400 | Chave PIX não configurada | Configure via `/v1/register` |
+| 400 | Saldo menor que R$ 5,00 | Aguarde mais pagamentos |
+| 403 | Saque automático ativo | Desative via `/v1/register` |
+| 409 | Já há saque pendente | Aguarde processamento |

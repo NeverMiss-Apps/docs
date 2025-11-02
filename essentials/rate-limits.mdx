@@ -1,0 +1,187 @@
+---
+title: "Rate Limits"
+description: "Entenda os limites de requisição da API"
+---
+
+## Limites Gerais
+
+A API Carteira NeverMiss implementa rate limits para garantir a estabilidade e disponibilidade do serviço para todos os usuários.
+
+### Limites por Endpoint
+
+<CardGroup cols={2}>
+  <Card title="Requisições Gerais" icon="gauge">
+    **60 requisições/minuto**
+    
+    Aplicado à maioria dos endpoints da API
+  </Card>
+  
+  <Card title="Atualização de Registro" icon="clock">
+    **30 segundos entre requisições**
+    
+    Endpoint: `POST /v1/register`
+  </Card>
+</CardGroup>
+
+## Headers de Rate Limit
+
+Cada resposta da API inclui headers que informam sobre o uso do rate limit:
+
+```
+X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 45
+X-RateLimit-Reset: 1698765432
+```
+
+| Header | Descrição |
+|--------|-----------|
+| `X-RateLimit-Limit` | Número máximo de requisições permitidas no período |
+| `X-RateLimit-Remaining` | Número de requisições restantes no período atual |
+| `X-RateLimit-Reset` | Timestamp Unix quando o limite será resetado |
+
+## Resposta quando o Limite é Excedido
+
+Quando você excede o rate limit, a API retorna um erro `429 Too Many Requests`:
+
+```json
+{
+  "error": "Too Many Requests",
+  "message": "Rate limit exceeded. Please try again in 30 seconds",
+  "retryAfter": 30
+}
+```
+
+## Boas Práticas
+
+<AccordionGroup>
+  <Accordion title="Implemente backoff exponencial">
+    Quando receber um erro 429, aguarde o tempo especificado antes de tentar novamente:
+    
+    ```javascript Node.js
+    async function makeRequestWithRetry(url, options, maxRetries = 3) {
+      for (let i = 0; i < maxRetries; i++) {
+        const response = await fetch(url, options);
+        
+        if (response.status === 429) {
+          const retryAfter = response.headers.get('Retry-After') || 60;
+          console.log(`Rate limited. Waiting ${retryAfter}s...`);
+          await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
+          continue;
+        }
+        
+        return response;
+      }
+      throw new Error('Max retries exceeded');
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Use cache quando possível">
+    Para dados que não mudam frequentemente, implemente cache:
+    
+    ```javascript Node.js
+    const cache = new Map();
+    const CACHE_TTL = 60000; // 1 minuto
+    
+    async function getBalance() {
+      const cached = cache.get('balance');
+      if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+        return cached.data;
+      }
+      
+      const response = await fetch('https://carteira.nevermissapps.com/v1/balance', {
+        headers: { 'Authorization': `Bearer ${API_KEY}` }
+      });
+      
+      const data = await response.json();
+      cache.set('balance', { data, timestamp: Date.now() });
+      return data;
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Agrupe operações">
+    Em vez de fazer múltiplas requisições separadas, agrupe quando possível:
+    
+    ✅ **Bom**: Buscar lista de transações com filtros
+    ```javascript
+    const response = await fetch(
+      'https://carteira.nevermissapps.com/v1/transactions?limit=100&status=approved'
+    );
+    ```
+    
+    ❌ **Ruim**: Buscar cada transação individualmente
+    ```javascript
+    for (const txid of txids) {
+      await fetch(`https://carteira.nevermissapps.com/v1/transactions/${txid}`);
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Monitore o rate limit">
+    Acompanhe os headers de rate limit para evitar bloqueios:
+    
+    ```javascript Node.js
+    const response = await fetch(url, options);
+    
+    const remaining = response.headers.get('X-RateLimit-Remaining');
+    const reset = response.headers.get('X-RateLimit-Reset');
+    
+    if (remaining < 5) {
+      console.warn(`Atenção: apenas ${remaining} requisições restantes`);
+      console.warn(`Reset em: ${new Date(reset * 1000)}`);
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Rate Limits Específicos
+
+### POST /v1/register
+
+Este endpoint tem um limite mais restrito devido à natureza das operações de configuração:
+
+<Warning>
+**30 segundos entre requisições**
+
+Este limite é aplicado para proteger o sistema e evitar abusos. Planeje suas atualizações de configuração com antecedência.
+</Warning>
+
+```javascript Exemplo de controle
+let lastRegisterUpdate = 0;
+const REGISTER_COOLDOWN = 30000; // 30 segundos
+
+async function updateRegister(data) {
+  const now = Date.now();
+  const timeSinceLastUpdate = now - lastRegisterUpdate;
+  
+  if (timeSinceLastUpdate < REGISTER_COOLDOWN) {
+    const waitTime = REGISTER_COOLDOWN - timeSinceLastUpdate;
+    throw new Error(`Aguarde ${Math.ceil(waitTime / 1000)}s antes de atualizar novamente`);
+  }
+  
+  const response = await fetch('https://carteira.nevermissapps.com/v1/register', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${API_KEY}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  });
+  
+  lastRegisterUpdate = now;
+  return response;
+}
+```
+
+## Quando Aumentar os Limites
+
+Se sua aplicação requer limites maiores, entre em contato com nosso suporte:
+
+- **Discord**: [NeverMiss Apps Community](https://discord.gg/ytYcv4ETJQ)
+- **Email**: nevermiss@cubehosting.app
+
+Forneça informações sobre:
+- Volume esperado de requisições
+- Caso de uso da aplicação
+- Motivo para aumento dos limites

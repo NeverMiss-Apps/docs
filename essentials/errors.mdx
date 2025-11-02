@@ -1,0 +1,383 @@
+---
+title: "Códigos de Erro"
+description: "Entenda os erros da API e como tratá-los"
+---
+
+## Códigos de Status HTTP
+
+A API Carteira NeverMiss usa códigos de status HTTP padrão para indicar sucesso ou falha:
+
+<CardGroup cols={2}>
+  <Card title="2xx - Sucesso" icon="check" color="#10b981">
+    A requisição foi bem-sucedida
+  </Card>
+  <Card title="4xx - Erro do Cliente" icon="triangle-exclamation" color="#f59e0b">
+    Erro causado por dados inválidos ou ação não permitida
+  </Card>
+  <Card title="5xx - Erro do Servidor" icon="server" color="#ef4444">
+    Erro interno do servidor
+  </Card>
+</CardGroup>
+
+## Códigos de Sucesso
+
+| Código | Status | Descrição |
+|--------|--------|-----------|
+| `200` | OK | Requisição bem-sucedida |
+| `201` | Created | Recurso criado com sucesso |
+
+## Códigos de Erro do Cliente
+
+### 400 - Bad Request
+
+Dados inválidos ou campos obrigatórios faltando.
+
+**Exemplo de resposta:**
+```json
+{
+  "error": "Bad Request",
+  "message": "Invalid amount value"
+}
+```
+
+**Causas comuns:**
+- Valor do pagamento inválido ou negativo
+- Descrição faltando ao criar pagamento
+- Chave PIX inválida para o tipo especificado
+- JSON malformado no body da requisição
+
+**Solução:**
+- Valide os dados antes de enviar
+- Verifique se todos os campos obrigatórios estão presentes
+- Confirme que os tipos de dados estão corretos
+
+---
+
+### 401 - Unauthorized
+
+Autenticação falhou ou API Key inválida.
+
+**Exemplo de resposta:**
+```json
+{
+  "error": "Unauthorized",
+  "message": "Invalid or missing API key"
+}
+```
+
+**Causas comuns:**
+- API Key ausente no header
+- API Key inválida ou revogada
+- Formato do header Authorization incorreto
+
+**Solução:**
+- Verifique se o header `Authorization: Bearer SUA_API_KEY` está presente
+- Confirme que a API Key está correta
+- Entre em contato com o suporte se a chave foi revogada
+
+---
+
+### 403 - Forbidden
+
+Ação não permitida no estado atual.
+
+**Exemplo de resposta:**
+```json
+{
+  "error": "Forbidden",
+  "message": "Cannot withdraw manually when auto-withdrawal is enabled"
+}
+```
+
+**Causas comuns:**
+- Tentar saque manual com saque automático ativado
+- Tentar atualizar configuração bloqueada
+- Operação não permitida para seu tipo de conta
+
+**Solução:**
+- Desative o saque automático antes de sacar manualmente
+- Verifique os pré-requisitos da operação
+- Consulte a documentação do endpoint específico
+
+---
+
+### 404 - Not Found
+
+Recurso não encontrado.
+
+**Exemplo de resposta:**
+```json
+{
+  "error": "Not Found",
+  "message": "Transaction not found"
+}
+```
+
+**Causas comuns:**
+- Transaction ID (txid) inválido ou inexistente
+- Tentar acessar transação de outro usuário
+- Endpoint incorreto
+
+**Solução:**
+- Verifique se o txid está correto
+- Confirme que a transação pertence à sua conta
+- Verifique a URL do endpoint
+
+---
+
+### 409 - Conflict
+
+Conflito com o estado atual do recurso.
+
+**Exemplo de resposta:**
+```json
+{
+  "error": "Conflict",
+  "message": "A withdrawal is already pending"
+}
+```
+
+**Causas comuns:**
+- Tentar criar segundo saque com um já pendente
+- Tentar reembolsar pagamento já reembolsado
+- Operação duplicada
+
+**Solução:**
+- Aguarde o saque pendente ser processado
+- Verifique o status atual antes de fazer a operação
+- Implemente idempotência no seu código
+
+---
+
+### 429 - Too Many Requests
+
+Rate limit excedido.
+
+**Exemplo de resposta:**
+```json
+{
+  "error": "Too Many Requests",
+  "message": "Rate limit exceeded. Please try again in 30 seconds",
+  "retryAfter": 30
+}
+```
+
+**Causas comuns:**
+- Mais de 60 requisições por minuto
+- Múltiplas chamadas a `/v1/register` em menos de 30 segundos
+- Polling muito frequente
+
+**Solução:**
+- Implemente backoff exponencial
+- Use webhooks em vez de polling constante
+- Respeite o campo `retryAfter`
+- Veja a página de [Rate Limits](/essentials/rate-limits) para mais detalhes
+
+## Códigos de Erro do Servidor
+
+### 500 - Internal Server Error
+
+Erro interno do servidor.
+
+**Exemplo de resposta:**
+```json
+{
+  "error": "Internal Server Error",
+  "message": "An unexpected error occurred"
+}
+```
+
+**Causas:**
+- Erro inesperado no processamento
+- Problema temporário na infraestrutura
+- Falha em serviço externo (Banco Central, Transfeera)
+
+**Solução:**
+- Tente novamente após alguns segundos
+- Se persistir, entre em contato com o suporte
+- Verifique a [página de status](https://status.nevermissapps.com) (se disponível)
+
+## Estrutura de Resposta de Erro
+
+Todos os erros seguem uma estrutura consistente:
+
+```json
+{
+  "error": "Nome do Erro",
+  "message": "Descrição detalhada do erro",
+  "details": {
+    // Informações adicionais (opcional)
+  }
+}
+```
+
+## Tratamento de Erros
+
+### Boas Práticas
+
+<AccordionGroup>
+  <Accordion title="Sempre verifique o status code" icon="check-double">
+    ```javascript
+    const response = await fetch(url, options);
+    
+    if (!response.ok) {
+      const error = await response.json();
+      console.error(`Erro ${response.status}:`, error.message);
+      
+      // Trate baseado no código
+      switch (response.status) {
+        case 400:
+          // Dados inválidos
+          break;
+        case 401:
+          // Problema de autenticação
+          break;
+        case 429:
+          // Rate limit
+          break;
+        default:
+          // Erro genérico
+      }
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Implemente retry com backoff" icon="rotate">
+    ```javascript
+    async function makeRequestWithRetry(url, options, maxRetries = 3) {
+      for (let attempt = 0; attempt < maxRetries; attempt++) {
+        try {
+          const response = await fetch(url, options);
+          
+          if (response.status === 429) {
+            const retryAfter = parseInt(
+              response.headers.get('Retry-After') || '60'
+            );
+            console.log(`Rate limited. Waiting ${retryAfter}s...`);
+            await sleep(retryAfter * 1000);
+            continue;
+          }
+          
+          if (response.status >= 500) {
+            // Erro do servidor - retry com backoff
+            const delay = Math.pow(2, attempt) * 1000;
+            console.log(`Server error. Retrying in ${delay}ms...`);
+            await sleep(delay);
+            continue;
+          }
+          
+          return response;
+        } catch (error) {
+          if (attempt === maxRetries - 1) throw error;
+          await sleep(Math.pow(2, attempt) * 1000);
+        }
+      }
+    }
+    
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Log erros para debugging" icon="file-lines">
+    ```javascript
+    async function apiRequest(url, options) {
+      try {
+        const response = await fetch(url, options);
+        
+        if (!response.ok) {
+          const error = await response.json();
+          
+          // Log detalhado do erro
+          console.error('API Error:', {
+            url,
+            status: response.status,
+            error: error.message,
+            timestamp: new Date().toISOString(),
+            requestId: response.headers.get('X-Request-ID')
+          });
+          
+          throw new Error(error.message);
+        }
+        
+        return await response.json();
+      } catch (error) {
+        console.error('Network Error:', error);
+        throw error;
+      }
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Forneça feedback ao usuário" icon="message">
+    ```javascript
+    try {
+      const payment = await createPayment(data);
+      showSuccess('Pagamento criado com sucesso!');
+    } catch (error) {
+      if (error.status === 400) {
+        showError('Dados inválidos. Verifique as informações e tente novamente.');
+      } else if (error.status === 429) {
+        showError('Muitas requisições. Aguarde um momento e tente novamente.');
+      } else if (error.status >= 500) {
+        showError('Erro temporário. Estamos trabalhando para resolver.');
+      } else {
+        showError('Erro ao criar pagamento. Entre em contato com o suporte.');
+      }
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Erros Específicos por Endpoint
+
+### POST /v1/payment/create
+
+| Erro | Descrição |
+|------|-----------|
+| `400` | Valor inválido ou descrição faltando |
+| `500` | Erro ao criar cobrança no Banco Central |
+
+### GET /v1/payment/status/:txid
+
+| Erro | Descrição |
+|------|-----------|
+| `404` | Transação não encontrada ou não pertence a você |
+
+### POST /v1/withdraw
+
+| Erro | Descrição |
+|------|-----------|
+| `400` | Chave PIX não configurada ou saldo insuficiente |
+| `403` | Saque automático ativado (desative primeiro) |
+| `409` | Já existe um saque pendente |
+
+### POST /v1/register
+
+| Erro | Descrição |
+|------|-----------|
+| `400` | Chave PIX inválida ou campos faltando |
+| `429` | Rate limit - aguarde 30 segundos |
+
+### POST /v1/refund
+
+| Erro | Descrição |
+|------|-----------|
+| `400` | Transação inválida ou saldo insuficiente |
+| `404` | Transação não encontrada |
+| `500` | Erro ao processar reembolso |
+
+## Suporte
+
+Se você encontrar erros não documentados ou precisar de ajuda:
+
+- **Discord**: [NeverMiss Apps Community](https://discord.gg/ytYcv4ETJQ)
+- **Email**: nevermiss@cubehosting.app
+
+Ao reportar um erro, inclua:
+- Request ID (header `X-Request-ID` da resposta)
+- Código de status HTTP
+- Mensagem de erro completa
+- Timestamp do erro
+- Endpoint que causou o erro
